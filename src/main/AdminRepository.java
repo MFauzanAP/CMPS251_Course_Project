@@ -20,7 +20,7 @@ import utils.TimeUtils;
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.6
+ * @version		1.7
  * @since		1.1
  */
 public final class AdminRepository {
@@ -31,7 +31,7 @@ public final class AdminRepository {
 //region
 
 	private static ArrayList<Patient> patients = new ArrayList<Patient>();
-	public static ArrayList<Service> services = new ArrayList<Service>();
+	private static ArrayList<Service> services = new ArrayList<Service>();
 	private static TreeMap<Service, TreeMap<LocalDate, TreeMap<LocalTime, Slot>>> slots = new TreeMap<>();
 
 //endregion
@@ -41,13 +41,94 @@ public final class AdminRepository {
 /* --------------------------- Getters and Setters -------------------------- */
 //region
 
+	/** 
+	 * Gets all the services currently stored
+	 * 
+	 * @return ArrayList<Service>		- the list of services currently stored
+	 */
+	public static ArrayList<Service> getServices() {
+		return services;
+	}
 
-//endregion
+	/** 
+	 * Gets all the services currently stored that have the given title
+	 * 
+	 * @param title						- the title of the service to fetch
+	 * 
+	 * @return ArrayList<Service>		- the resulting list of services
+	 */
+	public static ArrayList<Service> getServices(String title) {
 
+		//	Create a list to store the output results
+		ArrayList<Service> outputList = new ArrayList<Service>();
 
+		//	Loop through each service and find those with the same title
+		for (Service service : services) {
+			if (service.getTitle() == title) outputList.add(service);
+		}
 
-/* ------------------------------ Logic Methods ----------------------------- */
-//region
+		//	Return the results
+		return outputList;
+
+	}
+
+	/** 
+	 * Gets all the services currently stored that have one of the given titles
+	 * 
+	 * @param titles					- a list of titles to fetch for
+	 * 
+	 * @return ArrayList<Service>		- the resulting list of services
+	 */
+	public static ArrayList<Service> getServices(ArrayList<String> titles) {
+
+		//	Create a list to store the output results
+		ArrayList<Service> outputList = new ArrayList<Service>();
+
+		//	Loop through each service and find those with the same title
+		for (Service service : services) {
+			if (titles.contains(service.getTitle())) outputList.add(service);
+		}
+
+		//	Return the results
+		return outputList;
+
+	}
+
+	/** 
+	 * Adds a single given service to the list of services
+	 * 
+	 * @param service						- the service to add to the list
+	 * 
+	 * @throws IllegalArgumentException		if the service already exists in the list
+	 */
+	public static void addServices(Service service) {
+
+		//	If the service already exists
+		if (services.contains(service)) throw new IllegalArgumentException("The given service is already in the list!");
+
+		//	If it doesn't exist then add it
+		services.add(service);
+
+	}
+
+	/** 
+	 * Adds a list of services to the list of services
+	 * 
+	 * @param services						- the list of services to add to the list
+	 * 
+	 * @throws IllegalArgumentException		if a service already exists in the list
+	 */
+	public static void addServices(ArrayList<Service> newServices) {
+
+		//	If the services already exists
+		ArrayList<Service> intersection = new ArrayList<Service>(newServices);
+		intersection.retainAll(services);
+		if (intersection.size() != 0) throw new IllegalArgumentException(String.format("The service with ID %s is already in the list!", intersection.get(0).getId()));
+
+		//	If it doesn't exist then add it
+		services.addAll(newServices);
+		
+	}
 
 	/** 
 	 * Returns a list of booked slots for all dates under the given service.

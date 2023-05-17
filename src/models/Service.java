@@ -14,7 +14,7 @@ import exceptions.IllegalServicePriceException;
  * <p> <i>Created on 17/05/2023 by Grafael Karilwurara</i>
  * 
  * @author		Grafael Karilwurara
- * @version		1.6
+ * @version		1.7
  * @since		1.5
  */
 public class Service extends Identifiable implements Comparable<Service> {
