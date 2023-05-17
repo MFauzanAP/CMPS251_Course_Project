@@ -9,6 +9,6 @@ public class App {
         test.reserve(null, null);
         System.out.println(test.getId());
         System.out.println(AdminApp.getServiceSlots(LocalDate.parse("2023-05-17"), null));
-        System.out.println(AdminApp.getAvailableSlots(LocalDate.parse("2023-05-17")).values());
+        System.out.println(AdminApp.getAvailableSlots(LocalDate.parse("2023-05-17"), null));
     }
 }

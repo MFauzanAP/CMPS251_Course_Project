@@ -18,7 +18,7 @@ import utils.TimeUtils;
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.3
+ * @version		1.4
  * @since		1.1
  */
 public final class AdminApp {
@@ -40,161 +40,196 @@ public final class AdminApp {
 //region
 
 	/** 
-	 * Returns a hashmap of slots for all dates under the given service.
+	 * Returns a list of booked slots for all dates under the given service.
 	 * 
 	 * <p> If no service is specified, this function will return all slots under all services
 	 * 
-	 * @param service										- the service to fetch slots for
+	 * @param service				- the service to fetch slots for
 	 * 
-	 * @return TreeMap<LocalDate, TreeMap<LocalTime, Slot>>	- a hashmap of slots for all dates under the given service
+	 * @return ArrayList<Slot>		- a list of booked slots for all dates under the given service
 	 */
-	public static TreeMap<LocalDate, TreeMap<LocalTime, Slot>> getServiceSlots(Service service) {
+	public static ArrayList<Slot> getServiceSlots(Service service) {
 
 		//	Create a new list of slots to be returned
-		TreeMap<LocalDate, TreeMap<LocalTime, Slot>> outputMap = new TreeMap<>();
+		ArrayList<Slot> outputList = new ArrayList<>();
 
 		//	If a service is given, return it's slots
-		if (service != null && slots.containsKey(service)) return slots.get(service);
+		if (service != null && slots.containsKey(service)) {
+			for (TreeMap<LocalTime, Slot> timeMap : slots.getOrDefault(service, new TreeMap<>()).values()) {
+				outputList.addAll(timeMap.values());
+			}
+			return outputList;
+		}
 
 		//	If no service is given then concatenate all the slots together
-		for (TreeMap<LocalDate, TreeMap<LocalTime, Slot>> map : slots.values()) {
-			outputMap.putAll(map);
+		for (TreeMap<LocalDate, TreeMap<LocalTime, Slot>> dateMap : slots.values()) {
+			for (TreeMap<LocalTime, Slot> timeMap : dateMap.values()) {
+				outputList.addAll(timeMap.values());
+			}
 		}
 
 		//	Return the given service slots
-		return outputMap;
+		return outputList;
 
 	}
 
 	/** 
-	 * Returns a hashmap of slots for the given date under the given service.
+	 * Returns a list of booked slots for the given date under the given service.
 	 * 
 	 * <p> If no service is specified, this function will return all slots under all services
 	 * 
-	 * @param date							- the date to check slots for
-	 * @param service						- the service to fetch slots for
+	 * @param date					- the date to check slots for
+	 * @param service				- the service to fetch slots for
 	 * 
-	 * @return TreeMap<LocalTime, Slot>		- a hashmap of slots under the given service
+	 * @return ArrayList<Slot>		- a list of booked slots under the given service
 	 */
-	public static TreeMap<LocalTime, Slot> getServiceSlots(LocalDate date, Service service) {
+	public static ArrayList<Slot> getServiceSlots(LocalDate date, Service service) {
 
 		//	Create a new list of slots to be returned
-		TreeMap<LocalTime, Slot> outputMap = new TreeMap<>();
+		ArrayList<Slot> outputList = new ArrayList<>();
 
 		//	Check if the given date is in the past
-		if (Slot.isValidDate(null, date, false) != "") return outputMap;
+		if (Slot.isValidDate(null, date, false) != "") return outputList;
 
-		//	Check if a service is given
+		//	If a service is given, return it's slots
+		if (service != null && slots.containsKey(service)) {
+			outputList.addAll(slots.getOrDefault(service, new TreeMap<>()).getOrDefault(date, new TreeMap<>()).values());
+			return outputList;
+		}
+
+		//	If no service is given then concatenate all the slots together
+		for (TreeMap<LocalDate, TreeMap<LocalTime, Slot>> dateMap : slots.values()) {
+			outputList.addAll(dateMap.getOrDefault(date, new TreeMap<>()).values());
+		}
+
+		//	Return the given service slots
+		return outputList;
+
+	}
+
+	/** 
+	 * Returns a list of booked slots for all dates under the given service list.
+	 * 
+	 * @param services				- the list of services to check slots for
+	 * 
+	 * @return ArrayList<Slot>		- a list of booked slots under the given service
+	 */
+	public static ArrayList<Slot> getServiceListSlots(ArrayList<Service> services) {
+
+		//	Create a new list of slots to be returned
+		ArrayList<Slot> outputList = new ArrayList<>();
+
+		//	Loop through each of the services and get their slots
+		for (Service service : services) {
+			outputList.addAll(getServiceSlots(service));
+		}
+
+		//	Return the given service slots
+		return outputList;
+
+	}
+	
+	/** 
+	 * Returns a list of booked slots under the given service list.
+	 * 
+	 * @param date					- the date to check slots for
+	 * @param services				- the list of services to check slots for
+	 * 
+	 * @return ArrayList<Slot>		- a list of booked slots under the given service
+	 */
+	public static ArrayList<Slot> getServiceListSlots(LocalDate date, ArrayList<Service> services) {
+
+		//	Create a new list of slots to be returned
+		ArrayList<Slot> outputList = new ArrayList<>();
+
+		//	Check if the given date is in the past
+		if (Slot.isValidDate(null, date, false) != "") return outputList;
+
+		//	Loop through each of the services and get their slots
+		for (Service service : services) {
+			outputList.addAll(getServiceSlots(date, service));
+		}
+
+		//	Return the given service slots
+		return outputList;
+
+	}
+
+	/** 
+	 * Returns a list of slots for the given service that are available for the given date.
+	 * Note that this date cannot be in the past!
+	 * 
+	 * <p> If no service is specified, this function will return all available slots under all services
+	 * 
+	 * @param date					- the date to check slots for
+	 * @param service				- the service to check slots for
+	 * 
+	 * @return ArrayList<Slot>		- a list of available slots for the given date
+	 */
+	public static ArrayList<Slot> getAvailableSlots(LocalDate date, Service service) {
+
+		//	Create a new list of slots to be returned
+		ArrayList<Slot> outputList = new ArrayList<>();
+
+		//	Check if the given date is in the past
+		if (Slot.isValidDate(null, date, false) != "") return outputList;
+
+		//	If a service is given
 		if (service != null) {
 
-			//	Get slots for all dates
-			TreeMap<LocalDate, TreeMap<LocalTime, Slot>> serviceSlots = getServiceSlots(service);
+			//	Loop through each time interval in the day
+			ArrayList<LocalTime> intervals = TimeUtils.getDateTimeIntervals(date);
+			TreeMap<LocalTime, Slot> allSlots = slots.getOrDefault(service, new TreeMap<>()).getOrDefault(date, new TreeMap<>());
+			for (LocalTime time : intervals) {
 
-			//	If a service is given, return it's slots
-			if (service != null && serviceSlots.containsKey(date)) {
-				outputMap.putAll(serviceSlots.get(date));
+				//	Catch illegal slot time exceptions
+				try {
+					
+					//	If there is no slot at this time then add it as a free slot
+					if (!allSlots.containsKey(time)) outputList.add(new Slot(date, time));
+
+					//	But if there is a slot, check if it is free
+					else if (!allSlots.get(time).isBooked()) outputList.add(new Slot(date, time));
+
+				}
+				catch (IllegalSlotTimeException e) {
+
+					//	If the given time is in the past, don't add it to the output list
+					continue;
+
+				}
+
 			}
 
 		}
 		else {
 
-			//	If no service is given then concatenate all the slots together
-			for (TreeMap<LocalDate, TreeMap<LocalTime, Slot>> dateMap : slots.values()) {
-				for (TreeMap<LocalTime, Slot> timeMap : dateMap.values()) {
-					outputMap.putAll(timeMap);
+			//	If no service is given then loop through each service
+			for (Service serviceElem : services) {
+
+				//	Loop through each time interval in the day
+				ArrayList<LocalTime> intervals = TimeUtils.getDateTimeIntervals(date);
+				TreeMap<LocalTime, Slot> allSlots = slots.getOrDefault(serviceElem, new TreeMap<>()).getOrDefault(date, new TreeMap<>());
+				for (LocalTime time : intervals) {
+
+					//	Catch illegal slot time exceptions
+					try {
+						
+						//	If there is no slot at this time then add it as a free slot
+						if (!allSlots.containsKey(time)) outputList.add(new Slot(date, time));
+
+						//	But if there is a slot, check if it is free
+						else if (!allSlots.get(time).isBooked()) outputList.add(new Slot(date, time));
+
+					}
+					catch (IllegalSlotTimeException e) {
+
+						//	If the given time is in the past, don't add it to the output list
+						continue;
+
+					}
+
 				}
-			}
-
-		}
-
-		//	Return the given service slots
-		return outputMap;
-
-	}
-
-	/** 
-	 * Returns a hashmap of slots for all dates under the given service list.
-	 * 
-	 * @param services										- the list of services to check slots for
-	 * 
-	 * @return TreeMap<LocalDate, TreeMap<LocalTime, Slot>>	- a hashmap of slots under the given service
-	 */
-	public static TreeMap<LocalDate, TreeMap<LocalTime, Slot>> getServiceListSlots(ArrayList<Service> services) {
-
-		//	Create a new list of slots to be returned
-		TreeMap<LocalDate, TreeMap<LocalTime, Slot>> outputMap = new TreeMap<>();
-
-		//	Loop through each of the services and get their slots
-		for (Service service : services) {
-			outputMap.putAll(slots.getOrDefault(service, new TreeMap<>()));
-		}
-
-		//	Return the given service slots
-		return outputMap;
-
-	}
-	
-	/** 
-	 * Returns a hashmap of slots under the given service list.
-	 * 
-	 * @param date							- the date to check slots for
-	 * @param services						- the list of services to check slots for
-	 * 
-	 * @return TreeMap<LocalTime, Slot>		- a hashmap of slots under the given service
-	 */
-	public static TreeMap<LocalTime, Slot> getServiceListSlots(LocalDate date, ArrayList<Service> services) {
-
-		//	Create a new list of slots to be returned
-		TreeMap<LocalTime, Slot> outputMap = new TreeMap<>();
-
-		//	Check if the given date is in the past
-		if (Slot.isValidDate(null, date, false) != "") return outputMap;
-
-		//	Loop through each of the services and get their slots
-		for (Service service : services) {
-			outputMap.putAll(slots.getOrDefault(service, new TreeMap<>()).getOrDefault(date, new TreeMap<>()));
-		}
-
-		//	Return the given service slots
-		return outputMap;
-
-	}
-
-	/** 
-	 * Returns a hashmap of slots that are available for the given date.
-	 * Note that this date cannot be in the past!
-	 * 
-	 * @param date							- the date to check slots for
-	 * 
-	 * @return TreeMap<LocalTime, Slot>		- a hashmap of available slots for the given date
-	 */
-	public static TreeMap<LocalTime, Slot> getAvailableSlots(LocalDate date) {
-
-		//	Create a new hashmap of slots to be returned
-		TreeMap<LocalTime, Slot> outputList = new TreeMap<>();
-
-		//	Check if the given date is in the past
-		if (Slot.isValidDate(null, date, false) != "") return outputList;
-
-		//	Loop through each time interval in the day
-		ArrayList<LocalTime> intervals = TimeUtils.getDateTimeIntervals(date);
-		TreeMap<LocalTime, Slot> allSlots = getServiceSlots(date, null);
-		for (LocalTime time : intervals) {
-
-			//	Catch illegal slot time exceptions
-			try {
-				
-				//	If there is no slot at this time then add it as a free slot
-				if (!allSlots.containsKey(time)) outputList.put(time, new Slot(date, time));
-
-				//	But if there is a slot, check if it is free
-				else if (!allSlots.get(time).isBooked()) outputList.put(time, new Slot(date, time));
-
-			}
-			catch (IllegalSlotTimeException e) {
-
-				//	If the given time is in the past, don't add it to the output list
-				continue;
 
 			}
 
