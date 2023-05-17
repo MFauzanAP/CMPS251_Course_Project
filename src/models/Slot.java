@@ -6,6 +6,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Random;
 
+import exceptions.IllegalSlotDateException;
+import exceptions.IllegalSlotTimeException;
 import utils.TimeUtils;
 
 
@@ -19,7 +21,7 @@ import utils.TimeUtils;
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.1
+ * @version		1.2
  * @since		1.0
  */
 public class Slot extends Identifiable {
@@ -76,8 +78,8 @@ public class Slot extends Identifiable {
 		this();
 
 		//	Set object attributes
-		this.setTime(time);
 		this.setDate(date);
+		this.setTime(time);
 
 	}
 
@@ -94,8 +96,8 @@ public class Slot extends Identifiable {
 		this();
 
 		//	Set object attributes
-		this.setTime(time);
 		this.setDate(date);
+		this.setTime(time);
 
 	}
 
@@ -292,37 +294,37 @@ public class Slot extends Identifiable {
 	 * 
 	 * @return String						- the error message
 	 * 
-	 * @throws IllegalArgumentException		if given time starts before 7:00AM or after 8:30PM
-	 * @throws IllegalArgumentException		if given time is not within 30 minute time intervals
-	 * @throws IllegalArgumentException		if given time at the current slot date is in the past
+	 * @throws IllegalSlotTimeException		if given time starts before 7:00AM or after 8:30PM
+	 * @throws IllegalSlotTimeException		if given time is not within 30 minute time intervals
+	 * @throws IllegalSlotTimeException		if given time at the current slot date is in the past
 	 */
 	public static String isValidTime(Slot slot, LocalTime time, boolean throwError) {
 
 		//	If the given time is before the opening time
 		if (time.isBefore(MIN_TIME)) {
 			String errorMessage = "Starting time cannot be before " + MIN_TIME.toString() + "!";
-			if (throwError) throw new IllegalArgumentException(errorMessage);
+			if (throwError) throw new IllegalSlotTimeException(errorMessage);
 			return errorMessage;
 		}
 
 		//	If the given time is after the closing time
 		if (time.isAfter(MAX_TIME)) {
 			String errorMessage = "Starting time cannot be after " + MAX_TIME.toString() + "!";
-			if (throwError) throw new IllegalArgumentException(errorMessage);
+			if (throwError) throw new IllegalSlotTimeException(errorMessage);
 			return errorMessage;
 		}
 
 		//	If the given time is not in intervals of 30 minutes
 		if (time.getMinute() != 0 && time.getMinute() != 30) {
 			String errorMessage = "Starting time must be within 30 minute intervals!";
-			if (throwError) throw new IllegalArgumentException(errorMessage);
+			if (throwError) throw new IllegalSlotTimeException(errorMessage);
 			return errorMessage;
 		}
 
 		//	If this combination of time and the current slot date is in the past
-		if (slot.getDate() != null && LocalDateTime.of(slot.getDate(), time).isBefore(LocalDateTime.now())) {
+		if (slot != null && slot.getDate() != null && LocalDateTime.of(slot.getDate(), time).isBefore(LocalDateTime.now())) {
 			String errorMessage = "Starting time must not be in the past!";
-			if (throwError) throw new IllegalArgumentException(errorMessage);
+			if (throwError) throw new IllegalSlotTimeException(errorMessage);
 			return errorMessage;
 		}
 
@@ -340,16 +342,53 @@ public class Slot extends Identifiable {
 	 * 
 	 * @return String						- the error message
 	 * 
-	 * @throws IllegalArgumentException		if given date at the current slot time is in the past
+	 * @throws IllegalSlotDateException		if given date is in the past
+	 * @throws IllegalSlotDateException		if given date at the current slot time is in the past
 	 */
 	public static String isValidDate(Slot slot, LocalDate date, boolean throwError) {
 
-		//	If this combination of date and the current slot time is in the past
-		if (slot.getTime() != null && LocalDateTime.of(date, slot.getTime()).isBefore(LocalDateTime.now())) {
+		//	If the given date is in the past
+		if (date.isBefore(LocalDate.now().minusDays(1))) {
 			String errorMessage = "Starting date must not be in the past!";
-			if (throwError) throw new IllegalArgumentException(errorMessage);
+			if (throwError) throw new IllegalSlotDateException(errorMessage);
 			return errorMessage;
 		}
+
+		//	If this combination of date and the current slot time is in the past
+		if (slot != null && slot.getTime() != null && LocalDateTime.of(date, slot.getTime()).isBefore(LocalDateTime.now())) {
+			String errorMessage = "Starting date and time must not be in the past!";
+			if (throwError) throw new IllegalSlotDateException(errorMessage);
+			return errorMessage;
+		}
+
+		//	Else return nothing since the given date is valid
+		return "";
+
+	}
+
+	/** 
+	 * Checks if the given date time combination is valid
+	 * 
+	 * @param date							- the date to check the validity of
+	 * @param time							- the time to check the validity of
+	 * @param throwError					- should we throw an error here?
+	 * 
+	 * @return String						- the error message
+	 * 
+	 * @throws IllegalSlotDateException		if given date at the current slot time is in the past
+	 * @throws IllegalSlotTimeException		if given time starts before 7:00AM or after 8:30PM
+	 * @throws IllegalSlotTimeException		if given time is not within 30 minute time intervals
+	 * @throws IllegalSlotTimeException		if given time at the current slot date is in the past
+	 */
+	public static String isValidDateTime(LocalDate date, LocalTime time, boolean throwError) {
+
+		//	Check validity of date
+		String dateError = isValidDate(null, date, throwError);
+		if (dateError != "") return dateError;
+
+		//	Check validity of time
+		String timeError = isValidTime(null, time, throwError);
+		if (timeError != "") return timeError;
 
 		//	Else return nothing since the given date is valid
 		return "";
@@ -432,9 +471,9 @@ public class Slot extends Identifiable {
 	 * 
 	 * @return String						- the error message
 	 * 
-	 * @throws IllegalArgumentException		if given time starts before 7:00AM or after 8:30PM
-	 * @throws IllegalArgumentException		if given time is not within 30 minute time intervals
-	 * @throws IllegalArgumentException		if given time at the current slot date is in the past
+	 * @throws IllegalSlotTimeException		if given time starts before 7:00AM or after 8:30PM
+	 * @throws IllegalSlotTimeException		if given time is not within 30 minute time intervals
+	 * @throws IllegalSlotTimeException		if given time at the current slot date is in the past
 	 */
 	public String isValidTime(LocalTime time, boolean throwError) {
 		return isValidTime(this, time, throwError);
@@ -459,7 +498,7 @@ public class Slot extends Identifiable {
 	 * 
 	 * @return String						- the error message
 	 * 
-	 * @throws IllegalArgumentException		if given date at the current slot time is in the past
+	 * @throws IllegalSlotDateException		if given date at the current slot time is in the past
 	 */
 	public String isValidDate(LocalDate date, boolean throwError) {
 		return isValidDate(this, date, throwError);
