@@ -3,7 +3,10 @@ package models;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Random;
+
+import utils.TimeUtils;
 
 
 /**
@@ -16,7 +19,7 @@ import java.util.Random;
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.0
+ * @version		1.1
  * @since		1.0
  */
 public class Slot extends Identifiable {
@@ -68,6 +71,24 @@ public class Slot extends Identifiable {
 	 * @param date		- the slot's date
 	 */
 	public Slot(LocalTime time, LocalDate date) {
+
+		//	Call parent constructor to generate ID
+		this();
+
+		//	Set object attributes
+		this.setTime(time);
+		this.setDate(date);
+
+	}
+
+	/**
+	 * This constructor takes in a starting date and time for a slot.
+	 * It is meant to be used to create empty slots
+	 * 
+	 * @param date		- the slot's date
+	 * @param time		- the slot's starting time
+	 */
+	public Slot(LocalDate date, LocalTime time) {
 
 		//	Call parent constructor to generate ID
 		this();
@@ -237,6 +258,32 @@ public class Slot extends Identifiable {
 //region
 
 	/** 
+	 * Returns an array of slots for all time intervals for the given date
+	 * 
+	 * @param date						- the date to get slots for
+	 * 
+	 * @return ArrayList<Slot>			- an array of slots for the given date
+	 */
+	public static ArrayList<Slot> getTimeIntervalSlots(LocalDate date) {
+
+		//	Create a new list of time intervals to be returned
+		ArrayList<Slot> outputList = new ArrayList<Slot>();
+
+		//	Loop through each time interval in the day
+		ArrayList<LocalTime> intervals = TimeUtils.getDateTimeIntervals(date);
+		for (LocalTime time : intervals) {
+			
+			//	Create a slot and add it to the output list
+			outputList.add(new Slot(date, time));
+
+		}
+
+		//	Return the list of slots
+		return outputList;
+
+	}
+
+	/** 
 	 * Checks if the given time is valid for the given slot
 	 * 
 	 * @param slot							- the slot to check the time validity for
@@ -295,10 +342,10 @@ public class Slot extends Identifiable {
 	 * 
 	 * @throws IllegalArgumentException		if given date at the current slot time is in the past
 	 */
-	public String isValidDate(Slot slot, LocalDate date, boolean throwError) {
+	public static String isValidDate(Slot slot, LocalDate date, boolean throwError) {
 
 		//	If this combination of date and the current slot time is in the past
-		if (this.time != null && LocalDateTime.of(date, this.time).isBefore(LocalDateTime.now())) {
+		if (slot.getTime() != null && LocalDateTime.of(date, slot.getTime()).isBefore(LocalDateTime.now())) {
 			String errorMessage = "Starting date must not be in the past!";
 			if (throwError) throw new IllegalArgumentException(errorMessage);
 			return errorMessage;
@@ -313,7 +360,7 @@ public class Slot extends Identifiable {
 	 * Returns this object as a string representation
 	 * 
 	 * <p> This method formats the properties in the following way:
-	 * <p> {@code ID: <id>, Time Slot: <date> <time>, Service: <allocatedService>, Patient <allocatedPatient>}
+	 * <p> {@code ID: <id>, Time Slot: <date> <time>, Status: <isBooked>, Service: <allocatedService>, Patient <allocatedPatient>}
 	 */	
 	@Override
 	public String toString() {
@@ -322,12 +369,15 @@ public class Slot extends Identifiable {
 		String idString = super.toString();
 
 		//	Merge slot date and time into one object
-		LocalDateTime dateTime = LocalDateTime.of(this.date, this.time);
+		String dateTime = LocalDateTime.of(this.date, this.time).toString();
 
 		//	Concatenate with this object's properties
+		String status = this.isBooked() ? "Booked" : "Available";
+		String service = this.isBooked() ? this.getAllocatedService().toString() : "None";
+		String patient = this.isBooked() ? this.getAllocatedPatient().toString() : "None";
 		return String.format(
-			"%s, Time Slot: %s, Service: %s, Patient: %s",
-			idString, dateTime.toString(), this.allocatedService.toString(), this.allocatedPatient.toString()
+			"%s, Time Slot: %s, Status: %s, Service: %s, Patient: %s %n",
+			idString, dateTime, status, service, patient
 		);
 
 	}
