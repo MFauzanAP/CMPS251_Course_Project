@@ -21,7 +21,7 @@ import utils.TimeUtils;
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.2
+ * @version		1.3
  * @since		1.0
  */
 public class Slot extends Identifiable {
@@ -396,6 +396,24 @@ public class Slot extends Identifiable {
 	}
 
 	/** 
+	 * Checks if the given date time combination is valid
+	 * 
+	 * @param time							- the time to check the validity of
+	 * @param date							- the date to check the validity of
+	 * @param throwError					- should we throw an error here?
+	 * 
+	 * @return String						- the error message
+	 * 
+	 * @throws IllegalSlotDateException		if given date at the current slot time is in the past
+	 * @throws IllegalSlotTimeException		if given time starts before 7:00AM or after 8:30PM
+	 * @throws IllegalSlotTimeException		if given time is not within 30 minute time intervals
+	 * @throws IllegalSlotTimeException		if given time at the current slot date is in the past
+	 */
+	public static String isValidDateTime(LocalTime time, LocalDate date, boolean throwError) {
+		return isValidDateTime(date, time, throwError);
+	}
+
+	/** 
 	 * Returns this object as a string representation
 	 * 
 	 * <p> This method formats the properties in the following way:
@@ -498,6 +516,7 @@ public class Slot extends Identifiable {
 	 * 
 	 * @return String						- the error message
 	 * 
+	 * @throws IllegalSlotDateException		if given date is in the past
 	 * @throws IllegalSlotDateException		if given date at the current slot time is in the past
 	 */
 	public String isValidDate(LocalDate date, boolean throwError) {

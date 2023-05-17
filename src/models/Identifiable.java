@@ -7,12 +7,12 @@ package models;
  * 
  * <p> It is recommended to generate the {@code ID} property randomly.
  * This generation is implemented differently in each class, however a good method would be
- * to generate this value based on the object's class name, it's other properties, as well as the current system time
+ * to generate this value based on the object's class name and it's other properties
  * 
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.0
+ * @version		1.3
  * @since		1.0
  */
 public abstract class Identifiable {
@@ -59,7 +59,7 @@ public abstract class Identifiable {
 	}
 
 	/** 
-	 * This is an abstract method which should be called to randomly generate the ID for this object
+	 * This is an abstract method which should be called to generate the ID for this object
 	 */	
 	public abstract void generateId();
 
