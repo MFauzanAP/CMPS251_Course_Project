@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Random;
 
 import exceptions.IllegalSlotDateException;
 import exceptions.IllegalSlotTimeException;
@@ -21,7 +20,7 @@ import utils.TimeUtils;
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.3
+ * @version		1.5
  * @since		1.0
  */
 public class Slot extends Identifiable {
@@ -33,6 +32,8 @@ public class Slot extends Identifiable {
 
 	public static final LocalTime MIN_TIME = LocalTime.parse("07:00:00");
 	public static final LocalTime MAX_TIME = LocalTime.parse("20:30:00");
+	public static final int SLOT_DURATION = 30;
+	public static final int MAX_SLOTS_PER_DAY = 28;
 
 //endregion
 
@@ -110,7 +111,11 @@ public class Slot extends Identifiable {
 	 * @param allocatedService				- the slot's allocated service
 	 * @param allocatedPatient				- the slot's allocated patient
 	 * 
-	 * @throws IllegalArgumentException		if the given service or patient is null
+	 * @throws IllegalSlotDateException		if given date is in the past
+	 * @throws IllegalSlotDateException		if given date at the current slot time is in the past
+	 * @throws IllegalSlotTimeException		if given time starts before 7:00AM or after 8:30PM
+	 * @throws IllegalSlotTimeException		if given time is not within 30 minute time intervals
+	 * @throws IllegalSlotTimeException		if given time at the current slot date is in the past
 	 */
 	public Slot(LocalTime time, LocalDate date, Service allocatedService, Patient allocatedPatient) {
 
@@ -149,9 +154,9 @@ public class Slot extends Identifiable {
 	 * 
 	 * @param time							- new starting time of the slot
 	 * 
-	 * @throws IllegalArgumentException		if given time starts before 7:00AM or after 8:30PM
-	 * @throws IllegalArgumentException		if given time is not within 30 minute time intervals
-	 * @throws IllegalArgumentException		if given time at the current slot date is in the past
+	 * @throws IllegalSlotTimeException		if given time starts before 7:00AM or after 8:30PM
+	 * @throws IllegalSlotTimeException		if given time is not within 30 minute time intervals
+	 * @throws IllegalSlotTimeException		if given time at the current slot date is in the past
 	 */
 	private void setTime(LocalTime time) {
 
@@ -180,7 +185,8 @@ public class Slot extends Identifiable {
 	 * 
 	 * @param time							- new date of the slot
 	 * 
-	 * @throws IllegalArgumentException		if given date at the current slot time is in the past
+	 * @throws IllegalSlotDateException		if given date is in the past
+	 * @throws IllegalSlotDateException		if given date at the current slot time is in the past
 	 */
 	private void setDate(LocalDate date) {
 
@@ -436,48 +442,6 @@ public class Slot extends Identifiable {
 			"%s, Time Slot: %s, Status: %s, Service: %s, Patient: %s %n",
 			idString, dateTime, status, service, patient
 		);
-
-	}
-
-	/** 
-	 * Generates an ID for this slot
-	 * 
-	 * <p> This is calculated by doing the following:
-	 * <ol>
-	 * 		<li> Get the class name of the object
-	 * 		<li> Fetch the current system datetime
-	 * 		<li> Generate a random 4 digit number
-	 * 		<li> Concatenate these two numbers together
-	 * 		<li> Set the new id as this concatenation
-	 * </ol>
-	 * 
-	 * <p> <b>NOTE</b>: this method should only be called from within the constructor.
-	 * Usage outside may break certain features!
-	 */	
-	@Override
-	public void generateId() {
-
-		//	Get the class name
-		String className = this.getClass().getSimpleName();
-
-		//	Fetch the current system datetime and concatenate it into a single string
-		LocalDateTime currentDateTime = LocalDateTime.now();
-		int year = currentDateTime.getYear();
-		int month = currentDateTime.getMonthValue();
-		int day = currentDateTime.getDayOfMonth();
-		int hour = currentDateTime.getHour();
-		int minute = currentDateTime.getMinute();
-		int second = currentDateTime.getSecond();
-
-		//	Generate a random 4 digit number
-		Random rand = new Random();
-		int randInt = rand.nextInt(0, 9999);
-
-		//	Concatenate the datetime and random number together
-		String idConcat = String.format("%s%04d%02d%02d%02d%02d%02d%04d", className, year, month, day, hour, minute, second, randInt);
-
-		//	Set the new ID
-		this.id = idConcat;
 
 	}
 

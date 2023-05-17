@@ -29,7 +29,7 @@ public final class AdminApp {
 //region
 
 	private static ArrayList<Patient> patients = new ArrayList<Patient>();
-	private static ArrayList<Service> services = new ArrayList<Service>();
+	public static ArrayList<Service> services = new ArrayList<Service>();
 	private static TreeMap<Service, TreeMap<LocalDate, TreeMap<LocalTime, Slot>>> slots = new TreeMap<>();
 
 //endregion

@@ -1,5 +1,8 @@
 package models;
 
+import java.time.LocalDateTime;
+import java.util.Random;
+
 /**
  * This is an abstract class used by classes which implement the {@code ID} property
  * 
@@ -12,7 +15,7 @@ package models;
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.3
+ * @version		1.5
  * @since		1.0
  */
 public abstract class Identifiable {
@@ -59,9 +62,45 @@ public abstract class Identifiable {
 	}
 
 	/** 
-	 * This is an abstract method which should be called to generate the ID for this object
+	 * Generates an ID for this service
+	 * 
+	 * <p> This is calculated by doing the following:
+	 * <ol>
+	 * 		<li> Get the class name of the object
+	 * 		<li> Fetch the current system datetime
+	 * 		<li> Generate a random 4 digit number
+	 * 		<li> Concatenate these two numbers together
+	 * 		<li> Set the new id as this concatenation
+	 * </ol>
+	 * 
+	 * <p> <b>NOTE</b>: this method should only be called from within the constructor.
+	 * Usage outside may break certain features!
 	 */	
-	public abstract void generateId();
+	public void generateId() {
+
+		//	Get the class name
+		String className = this.getClass().getSimpleName();
+
+		//	Fetch the current system datetime and concatenate it into a single string
+		LocalDateTime currentDateTime = LocalDateTime.now();
+		int year = currentDateTime.getYear();
+		int month = currentDateTime.getMonthValue();
+		int day = currentDateTime.getDayOfMonth();
+		int hour = currentDateTime.getHour();
+		int minute = currentDateTime.getMinute();
+		int second = currentDateTime.getSecond();
+
+		//	Generate a random 4 digit number
+		Random rand = new Random();
+		int randInt = rand.nextInt(0, 9999);
+
+		//	Concatenate the datetime and random number together
+		String idConcat = String.format("%s%04d%02d%02d%02d%02d%02d%04d", className, year, month, day, hour, minute, second, randInt);
+
+		//	Set the new ID
+		this.id = idConcat;
+
+	}
 
 //endregion
 
