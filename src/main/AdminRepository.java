@@ -1,5 +1,6 @@
 package main;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -9,7 +10,9 @@ import exceptions.IllegalSlotTimeException;
 import models.Patient;
 import models.Service;
 import models.Slot;
+import utils.RepoUtils;
 import utils.TimeUtils;
+import utils.RepoUtils.DataType;
 
 /**
  * This class contains all the data related operations and functions in the Sehha hospital reception system
@@ -20,19 +23,56 @@ import utils.TimeUtils;
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.7
+ * @version		1.8
  * @since		1.1
  */
+@SuppressWarnings("unchecked")
 public final class AdminRepository {
 	
 
 
-/* --------------------------- Static Attributes --------------------------- */
+/* --------------------------- Constant Attributes -------------------------- */
 //region
 
-	private static ArrayList<Patient> patients = new ArrayList<Patient>();
-	private static ArrayList<Service> services = new ArrayList<Service>();
-	private static TreeMap<Service, TreeMap<LocalDate, TreeMap<LocalTime, Slot>>> slots = new TreeMap<>();
+	private static final ArrayList<Patient> patients = new ArrayList<Patient>();
+	private static final ArrayList<Service> services = new ArrayList<Service>();
+	private static final TreeMap<Service, TreeMap<LocalDate, TreeMap<LocalTime, Slot>>> slots = new TreeMap<>();
+
+//endregion
+
+
+
+/* ----------------------------- Utility Methods ---------------------------- */
+//region
+
+	/** 
+	 * Initializes the data by clearing it and fetching from files if they exist
+	 */
+	public static void initializeData() {
+
+		//	Clear all data
+		patients.clear();
+		services.clear();
+		slots.clear();
+
+		//	Try and fetch data from files if they exist
+		if (new File(DataType.PATIENT.getFileName()).exists()) patients.addAll((ArrayList<Patient>) RepoUtils.loadDataFromFile(DataType.PATIENT));
+		if (new File(DataType.SERVICE.getFileName()).exists()) services.addAll((ArrayList<Service>) RepoUtils.loadDataFromFile(DataType.SERVICE));
+		if (new File(DataType.SLOT.getFileName()).exists()) slots.putAll((TreeMap<Service, TreeMap<LocalDate, TreeMap<LocalTime, Slot>>>) RepoUtils.loadDataFromFile(DataType.SLOT));
+
+	}
+
+	/** 
+	 * Saves data to files
+	 */
+	public static void saveData() {
+
+		//	Save data to files
+		RepoUtils.saveDataToFile(DataType.PATIENT, patients);
+		RepoUtils.saveDataToFile(DataType.SERVICE, services);
+		RepoUtils.saveDataToFile(DataType.SLOT, slots);
+
+	}
 
 //endregion
 

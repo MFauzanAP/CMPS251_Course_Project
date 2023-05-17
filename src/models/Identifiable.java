@@ -1,5 +1,6 @@
 package models;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Random;
 
@@ -15,10 +16,10 @@ import java.util.Random;
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.5
+ * @version		1.8
  * @since		1.0
  */
-public abstract class Identifiable {
+public abstract class Identifiable implements Serializable {
 
 
 	

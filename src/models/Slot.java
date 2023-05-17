@@ -20,14 +20,14 @@ import utils.TimeUtils;
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.6
+ * @version		1.8
  * @since		1.0
  */
 public class Slot extends Identifiable {
 
 
 
-/* ---------------------------- Static Attributes --------------------------- */
+/* --------------------------- Constant Attributes -------------------------- */
 //region
 
 	public static final LocalTime MIN_TIME = LocalTime.parse("07:00:00");

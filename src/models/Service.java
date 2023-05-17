@@ -14,7 +14,7 @@ import exceptions.IllegalServicePriceException;
  * <p> <i>Created on 17/05/2023 by Grafael Karilwurara</i>
  * 
  * @author		Grafael Karilwurara
- * @version		1.7
+ * @version		1.8
  * @since		1.5
  */
 public class Service extends Identifiable implements Comparable<Service> {
@@ -65,7 +65,7 @@ public class Service extends Identifiable implements Comparable<Service> {
 
 		this.setTitle(title);
 		this.setMaxSlots(maxSlots);
-		this.setPricePerSlot(maxSlots);
+		this.setPricePerSlot(pricePerSlot);
 
 	}
 
@@ -245,7 +245,7 @@ public class Service extends Identifiable implements Comparable<Service> {
 		Service service = (Service) obj; 
 
 		//	Check the equality of each property
-		if (this.title != service.title) return false;
+		if (!this.title.equals(service.title)) return false;
 		if (this.maxSlots != service.maxSlots) return false;
 		if (this.pricePerSlot != service.pricePerSlot) return false;
 
