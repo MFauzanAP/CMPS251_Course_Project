@@ -20,7 +20,7 @@ import utils.TimeUtils;
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.5
+ * @version		1.6
  * @since		1.0
  */
 public class Slot extends Identifiable {
@@ -111,6 +111,7 @@ public class Slot extends Identifiable {
 	 * @param allocatedService				- the slot's allocated service
 	 * @param allocatedPatient				- the slot's allocated patient
 	 * 
+	 * @throws IllegalArgumentException		if given service or patient is null
 	 * @throws IllegalSlotDateException		if given date is in the past
 	 * @throws IllegalSlotDateException		if given date at the current slot time is in the past
 	 * @throws IllegalSlotTimeException		if given time starts before 7:00AM or after 8:30PM

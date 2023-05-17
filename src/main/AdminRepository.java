@@ -1,3 +1,5 @@
+package main;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -10,18 +12,18 @@ import models.Slot;
 import utils.TimeUtils;
 
 /**
- * This class contains all the business logic in the Sehha hospital reception system
+ * This class contains all the data related operations and functions in the Sehha hospital reception system
  * 
  * <p> This is where all the slots, services, and patients are managed
- * From here, you can add, modify, or remove the mentioned entities and is where the main logic is contained
+ * From here, you can add, modify, or remove the mentioned entities, along with some extra utility functions
  * 
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.4
+ * @version		1.6
  * @since		1.1
  */
-public final class AdminApp {
+public final class AdminRepository {
 	
 
 
@@ -31,6 +33,14 @@ public final class AdminApp {
 	private static ArrayList<Patient> patients = new ArrayList<Patient>();
 	public static ArrayList<Service> services = new ArrayList<Service>();
 	private static TreeMap<Service, TreeMap<LocalDate, TreeMap<LocalTime, Slot>>> slots = new TreeMap<>();
+
+//endregion
+
+
+
+/* --------------------------- Getters and Setters -------------------------- */
+//region
+
 
 //endregion
 
