@@ -10,10 +10,10 @@ import models.Patient.ResidencyType;
 
 public class AdminApp {
     public static void main(String[] args) throws Exception {
-        AdminRepository.initializeData();
+        // AdminRepository.initializeData();
         Slot test = new Slot(LocalTime.parse("20:30"), LocalDate.parse("2023-05-18"));
         test.reserve(null, null);
-        AdminRepository.patients.add(new Patient("12345678901", "Muhammad Putra", ResidencyType.RESIDENT));
+        AdminRepository.addPatients(new Patient("12345678901", "Muhammad Putra", ResidencyType.RESIDENT));
         AdminRepository.addServices(new Service("null1", 0, 0));
         AdminRepository.addServices(new Service("test", 0, 0));
         AdminRepository.addServices(new Service("test", 10, 0));

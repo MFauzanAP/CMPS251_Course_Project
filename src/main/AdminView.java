@@ -11,7 +11,7 @@ package main;
  * 
  * @author		Muhammad Putra
  * @version		1.7
- * @since		1.1
+ * @since		1.7
  */
 public class AdminView {
 	
