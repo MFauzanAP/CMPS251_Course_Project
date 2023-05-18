@@ -2,7 +2,6 @@ package repos;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.TreeMap;
 
 import models.Patient;
@@ -20,7 +19,7 @@ import utils.RepoUtils.DataType;
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.12
+ * @version		1.13
  * @since		1.1
  */
 @SuppressWarnings("unchecked")
@@ -37,17 +36,17 @@ public final class AdminRepository {
 	public static void initializeData() {
 
 		//	Initialize lists for the data to be stored in
-		ArrayList<Patient> patientList = new ArrayList<Patient>(); 
-		ArrayList<Service> serviceList = new ArrayList<Service>(); 
-		TreeMap<Service, TreeMap<LocalDate, TreeMap<LocalTime, Slot>>> slotList = new TreeMap<>(); 
+		TreeMap<String, Patient> patientList = new TreeMap<>(); 
+		TreeMap<String, Service> serviceList = new TreeMap<>(); 
+		TreeMap<String, TreeMap<LocalDate, TreeMap<LocalTime, Slot>>> slotList = new TreeMap<>(); 
 
 		//	Try to initialize the data
 		try {
 
 			//	Try and fetch data from files if they exist
-			patientList = (ArrayList<Patient>) RepoUtils.loadDataFromFile(DataType.PATIENT);
-			serviceList = (ArrayList<Service>) RepoUtils.loadDataFromFile(DataType.SERVICE);
-			slotList = (TreeMap<Service, TreeMap<LocalDate, TreeMap<LocalTime, Slot>>>) RepoUtils.loadDataFromFile(DataType.SLOT);
+			patientList = (TreeMap<String, Patient>) RepoUtils.loadDataFromFile(DataType.PATIENT);
+			serviceList = (TreeMap<String, Service>) RepoUtils.loadDataFromFile(DataType.SERVICE);
+			slotList = (TreeMap<String, TreeMap<LocalDate, TreeMap<LocalTime, Slot>>>) RepoUtils.loadDataFromFile(DataType.SLOT);
 
 		}
 		catch (Exception e) {
@@ -60,8 +59,8 @@ public final class AdminRepository {
 		}
 
 		//	Add the results to the local lists
-		PatientRepository.getPatients().addAll(patientList);
-		ServiceRepository.getServices().addAll(serviceList);
+		PatientRepository.getPatients().putAll(patientList);
+		ServiceRepository.getServices().putAll(serviceList);
 		SlotRepository.getSlots().putAll(slotList);
 
 	}

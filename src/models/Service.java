@@ -14,7 +14,7 @@ import exceptions.IllegalServicePriceException;
  * <p> <i>Created on 16/05/2023 by Grafael Karilwurara</i>
  * 
  * @author		Grafael Karilwurara
- * @version		1.10
+ * @version		1.13
  * @since		1.5
  */
 public class Service extends Identifiable implements Comparable<Service> {
@@ -88,6 +88,9 @@ public class Service extends Identifiable implements Comparable<Service> {
 	/**
 	 * Sets the title of this service
 	 * 
+	 * <p> <b>NOTE</b>: this method should never be called directly!
+	 * It should be called only inside it's repository class or constructor 
+	 * 
 	 * @param title				- new title of the service
 	 */
 	public void setTitle(String title) {
@@ -105,6 +108,9 @@ public class Service extends Identifiable implements Comparable<Service> {
 
 	/**
 	 * Sets the maximum number of slots per day for this service
+	 * 
+	 * <p> <b>NOTE</b>: this method should never be called directly!
+	 * It should be called only inside it's repository class or constructor 
 	 * 
 	 * @param maxSlots			- new max slots
 	 */
@@ -129,6 +135,9 @@ public class Service extends Identifiable implements Comparable<Service> {
 
 	/**
 	 * Sets the price of each slot for this service
+	 * 
+	 * <p> <b>NOTE</b>: this method should never be called directly!
+	 * It should be called only inside it's repository class or constructor 
 	 * 
 	 * @param pricePerSlot			- new price per slot
 	 */

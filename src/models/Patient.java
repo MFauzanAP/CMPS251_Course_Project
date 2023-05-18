@@ -12,7 +12,7 @@ import exceptions.IllegalPatientNameException;
  * <p> <i>Created on 16/05/2023 by Ahmad Chowdhury</i>
  * 
  * @author		Ahmad Chowdhury
- * @version		1.10
+ * @version		1.13
  * @since		1.9
  */
 public class Patient extends Identifiable {
@@ -77,6 +77,9 @@ public class Patient extends Identifiable {
 	/**
 	 * Sets the patient's ID using either their QID if they are a resident or their Visa number if they are visitors
 	 * 
+	 * <p> <b>NOTE</b>: this method should only be called from within the constructor.
+	 * Usage outside may break certain features!
+	 * 
 	 * @param id					- new ID of the patient
 	 */
 	@Override
@@ -102,6 +105,9 @@ public class Patient extends Identifiable {
 	/**
 	 * Sets the patient's name
 	 * 
+	 * <p> <b>NOTE</b>: this method should never be called directly!
+	 * It should be called only inside it's repository class or constructor 
+	 * 
 	 * @param name					- new name of the patient
 	 */
 	public void setName(String name) {
@@ -125,6 +131,9 @@ public class Patient extends Identifiable {
 
 	/**
 	 * Sets the patient's residency type
+	 * 
+	 * <p> <b>NOTE</b>: this method should never be called directly!
+	 * It should be called only inside it's repository class or constructor 
 	 * 
 	 * @param residency				- new residency type of the patient
 	 */

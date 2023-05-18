@@ -20,7 +20,7 @@ import utils.TimeUtils;
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.8
+ * @version		1.13
  * @since		1.0
  */
 public class Slot extends Identifiable {
@@ -70,44 +70,63 @@ public class Slot extends Identifiable {
 	 * This constructor takes in a starting date and time for a slot.
 	 * It is meant to be used to create empty slots
 	 * 
-	 * @param time		- the slot's starting time
-	 * @param date		- the slot's date
+	 * @param datetime						- the slot's date and time
 	 */
-	public Slot(LocalTime time, LocalDate date) {
+	public Slot(LocalDateTime datetime) {
 
 		//	Call parent constructor to generate ID
 		this();
 
 		//	Set object attributes
-		this.setDate(date);
-		this.setTime(time);
+		this.setDate(datetime.toLocalDate());
+		this.setTime(datetime.toLocalTime());
 
+	}
+	public Slot(LocalDate date, LocalTime time) {
+		this(LocalDateTime.of(date, time));
+	}
+	public Slot(LocalTime time, LocalDate date) {
+		this(LocalDateTime.of(date, time));
 	}
 
 	/**
-	 * This constructor takes in a starting date and time for a slot.
-	 * It is meant to be used to create empty slots
+	 * This constructor takes in a starting date and time, as well as an allocated service for a slot.
+	 * It is meant to be used to create available service slots
 	 * 
-	 * @param date		- the slot's date
-	 * @param time		- the slot's starting time
+	 * @param datetime						- the slot's date and time
+	 * @param allocatedService				- the slot's allocated service
+	 * 
+	 * @throws IllegalArgumentException		if given service is null
+	 * @throws IllegalSlotDateException		if given date is in the past
+	 * @throws IllegalSlotDateException		if given date at the current slot time is in the past
+	 * @throws IllegalSlotTimeException		if given time starts before 7:00AM or after 8:30PM
+	 * @throws IllegalSlotTimeException		if given time is not within 30 minute time intervals
+	 * @throws IllegalSlotTimeException		if given time at the current slot date is in the past
 	 */
-	public Slot(LocalDate date, LocalTime time) {
+	public Slot(LocalDateTime datetime, Service allocatedService) {
 
 		//	Call parent constructor to generate ID
-		this();
+		this(datetime);
 
-		//	Set object attributes
-		this.setDate(date);
-		this.setTime(time);
+		//	If the given service or patient is null
+		if (allocatedService == null) throw new IllegalArgumentException("Given service cannot be null!");
 
+		//	Set the slot's service
+		this.setAllocatedService(allocatedService);
+
+	}
+	public Slot(LocalDate date, LocalTime time, Service allocatedService) {
+		this(LocalDateTime.of(date, time), allocatedService);
+	}
+	public Slot(LocalTime time, LocalDate date, Service allocatedService) {
+		this(LocalDateTime.of(date, time), allocatedService);
 	}
 
 	/**
 	 * This constructor takes in a starting date and time, as well as an allocated service and patient for a slot.
 	 * It is meant to be used to create booked slots
 	 * 
-	 * @param time							- the slot's starting time
-	 * @param date							- the slot's date
+	 * @param datetime						- the slot's date and time
 	 * @param allocatedService				- the slot's allocated service
 	 * @param allocatedPatient				- the slot's allocated patient
 	 * 
@@ -118,10 +137,10 @@ public class Slot extends Identifiable {
 	 * @throws IllegalSlotTimeException		if given time is not within 30 minute time intervals
 	 * @throws IllegalSlotTimeException		if given time at the current slot date is in the past
 	 */
-	public Slot(LocalTime time, LocalDate date, Service allocatedService, Patient allocatedPatient) {
+	public Slot(LocalDateTime datetime, Service allocatedService, Patient allocatedPatient) {
 
 		//	Call parent constructor to generate ID
-		this(time, date);
+		this(datetime);
 
 		//	If the given service or patient is null
 		if (allocatedService == null || allocatedPatient == null) throw new IllegalArgumentException("Given service or patient cannot be null!");
@@ -129,6 +148,12 @@ public class Slot extends Identifiable {
 		//	Reserve this slot for the given service and patient
 		this.reserve(allocatedService, allocatedPatient);
 
+	}
+	public Slot(LocalDate date, LocalTime time, Service allocatedService, Patient allocatedPatient) {
+		this(LocalDateTime.of(date, time), allocatedService, allocatedPatient);
+	}
+	public Slot(LocalTime time, LocalDate date, Service allocatedService, Patient allocatedPatient) {
+		this(LocalDateTime.of(date, time), allocatedService, allocatedPatient);
 	}
 
 //endregion
@@ -150,8 +175,8 @@ public class Slot extends Identifiable {
 	/**
 	 * Sets the starting time of this slot
 	 * 
-	 * <p> <b>NOTE</b>: this method should only be called from within the constructor.
-	 * Usage outside may break certain features!
+	 * <p> <b>NOTE</b>: this method should never be called directly!
+	 * It should be called only inside it's repository class or constructor 
 	 * 
 	 * @param time							- new starting time of the slot
 	 * 
@@ -159,7 +184,7 @@ public class Slot extends Identifiable {
 	 * @throws IllegalSlotTimeException		if given time is not within 30 minute time intervals
 	 * @throws IllegalSlotTimeException		if given time at the current slot date is in the past
 	 */
-	private void setTime(LocalTime time) {
+	public void setTime(LocalTime time) {
 
 		//	Validate starting time
 		if (isValidTime(time, true) != "") return;
@@ -181,15 +206,15 @@ public class Slot extends Identifiable {
 	/**
 	 * Sets the date of this slot
 	 * 
-	 * <p> <b>NOTE</b>: this method should only be called from within the constructor.
-	 * Usage outside may break certain features!
+	 * <p> <b>NOTE</b>: this method should never be called directly!
+	 * It should be called only inside it's repository class or constructor 
 	 * 
 	 * @param time							- new date of the slot
 	 * 
 	 * @throws IllegalSlotDateException		if given date is in the past
 	 * @throws IllegalSlotDateException		if given date at the current slot time is in the past
 	 */
-	private void setDate(LocalDate date) {
+	public void setDate(LocalDate date) {
 
 		//	Validate slot date
 		if (isValidDate(date, true) != "") return;
@@ -211,6 +236,9 @@ public class Slot extends Identifiable {
 	/**
 	 * Sets the booking status of the slot
 	 * 
+	 * <p> <b>NOTE</b>: this method should never be called directly!
+	 * It should be called only inside it's repository class or constructor 
+	 * 
 	 * @param isBooked		
 	 */
 	public void setBooked(boolean isBooked) {
@@ -229,12 +257,12 @@ public class Slot extends Identifiable {
 	/**
 	 * Sets the slot's allocated service
 	 * 
-	 * <p> <b>NOTE</b>: this method should only be called from within the constructor.
-	 * Usage outside may break certain features!
+	 * <p> <b>NOTE</b>: this method should never be called directly!
+	 * It should be called only inside it's repository class or constructor 
 	 * 
 	 * @param allocatedService		- the service to allocate for this slot		
 	 */
-	private void setAllocatedService(Service allocatedService) {
+	public void setAllocatedService(Service allocatedService) {
 		this.allocatedService = allocatedService;
 	}
 
@@ -250,12 +278,12 @@ public class Slot extends Identifiable {
 	/**
 	 * Sets the slot's allocated patient
 	 * 
-	 * <p> <b>NOTE</b>: this method should only be called from within the constructor.
-	 * Usage outside may break certain features!
+	 * <p> <b>NOTE</b>: this method should never be called directly!
+	 * It should be called only inside it's repository class or constructor 
 	 * 
 	 * @param allocatedPatient		- the patient to allocate for this slot		
 	 */
-	private void setAllocatedPatient(Patient allocatedPatient) {
+	public void setAllocatedPatient(Patient allocatedPatient) {
 		this.allocatedPatient = allocatedPatient;
 	}
 
@@ -437,8 +465,8 @@ public class Slot extends Identifiable {
 
 		//	Concatenate with this object's properties
 		String status = this.isBooked() ? "Booked" : "Available";
-		String service = this.isBooked() ? this.getAllocatedService().toString() : "None";
-		String patient = this.isBooked() ? this.getAllocatedPatient().toString() : "None";
+		String service = this.getAllocatedService() != null ? this.getAllocatedService().getTitle() : "None";
+		String patient = this.getAllocatedPatient() != null ? this.getAllocatedPatient().getName() : "None";
 		return String.format(
 			"%s, Time Slot: %s, Status: %s, Service: %s, Patient: %s %n",
 			idString, dateTime, status, service, patient

@@ -16,7 +16,7 @@ import java.util.Random;
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.10
+ * @version		1.13
  * @since		1.0
  */
 public abstract class Identifiable implements Serializable {
@@ -46,6 +46,9 @@ public abstract class Identifiable implements Serializable {
 
 	/** 
 	 * Sets the ID of this object, should only be used externally for {@code Patient} class
+	 * 
+	 * <p> <b>NOTE</b>: this method should never be called directly!
+	 * It should be called only inside it's repository class or constructor 
 	 * 
 	 * @param id		- the object's id
 	 */
@@ -86,7 +89,7 @@ public abstract class Identifiable implements Serializable {
 	 * <p> <b>NOTE</b>: this method should only be called from within the constructor.
 	 * Usage outside may break certain features!
 	 */	
-	public void generateId() {
+	protected void generateId() {
 
 		//	Get the class name
 		String className = this.getClass().getSimpleName();
