@@ -16,7 +16,7 @@ import java.util.Random;
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.8
+ * @version		1.10
  * @since		1.0
  */
 public abstract class Identifiable implements Serializable {
@@ -42,6 +42,15 @@ public abstract class Identifiable implements Serializable {
 	 */
 	public String getId() {
 		return id;
+	}
+
+	/** 
+	 * Sets the ID of this object, should only be used externally for {@code Patient} class
+	 * 
+	 * @param id		- the object's id
+	 */
+	public void setId(String id) {
+		this.id = id;
 	}
 
 //endregion
@@ -99,7 +108,7 @@ public abstract class Identifiable implements Serializable {
 		String idConcat = String.format("%s%04d%02d%02d%02d%02d%02d%04d", className, year, month, day, hour, minute, second, randInt);
 
 		//	Set the new ID
-		this.id = idConcat;
+		this.setId(idConcat);
 
 	}
 

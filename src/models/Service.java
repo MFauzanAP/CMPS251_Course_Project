@@ -11,10 +11,10 @@ import exceptions.IllegalServicePriceException;
  * <p> It represents different services offered by the hospital that can be purchased by patients.
  * Each service has a title, price, description, and a maximum number of slots per day
  * 
- * <p> <i>Created on 17/05/2023 by Grafael Karilwurara</i>
+ * <p> <i>Created on 16/05/2023 by Grafael Karilwurara</i>
  * 
  * @author		Grafael Karilwurara
- * @version		1.8
+ * @version		1.10
  * @since		1.5
  */
 public class Service extends Identifiable implements Comparable<Service> {
@@ -230,7 +230,7 @@ public class Service extends Identifiable implements Comparable<Service> {
 	/** 
 	 * Compares this object to another service object and returns true if they are equal
 	 * 
-	 * @param service			- the object to compare with
+	 * @param obj			- the object to compare with
 	 * 
 	 * @return boolean			- are these two objects equal?
 	 */	

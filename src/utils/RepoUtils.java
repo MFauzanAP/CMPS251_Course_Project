@@ -12,7 +12,7 @@ import java.io.ObjectOutputStream;
  * <p> <i>Created on 17/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.8
+ * @version		1.10
  * @since		1.8
  */
 public class RepoUtils {
@@ -49,8 +49,11 @@ public class RepoUtils {
 	 * Loads data of the given type from the respective file
 	 * 
 	 * @param type						- the type of data being loaded
+	 * 
+	 * @throws IOException				if there was a problem loading the data
+	 * @throws ClassNotFoundException	if the file was corrupted
 	 */
-	public static Object loadDataFromFile(DataType type) {
+	public static Object loadDataFromFile(DataType type) throws IOException, ClassNotFoundException {
 
 		//	Get the final file path
 		String path = type.getFileName();
@@ -74,7 +77,7 @@ public class RepoUtils {
 			//	Print error message
 			System.err.printf("We were unable to load data from the file %s! %n", path);
 			System.err.printf("The following error occurred: %s! %n", e.getMessage());
-			return null;
+			throw new IOException(String.format("We were unable to load data from the file %s!", path));
 			
 		}
 		catch (ClassNotFoundException e) {
@@ -82,7 +85,7 @@ public class RepoUtils {
 			//	Print error message
 			System.err.printf("The file at %s is corrupted! %n", path);
 			System.err.printf("The following error occurred: %s! %n", e.getMessage());
-			return null;
+			throw new ClassNotFoundException(String.format("The file at %s is corrupted!", path));
 			
 		}
 

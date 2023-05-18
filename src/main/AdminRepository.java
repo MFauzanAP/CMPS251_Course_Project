@@ -1,6 +1,5 @@
 package main;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ import utils.RepoUtils.DataType;
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.8
+ * @version		1.10
  * @since		1.1
  */
 @SuppressWarnings("unchecked")
@@ -34,7 +33,7 @@ public final class AdminRepository {
 /* --------------------------- Constant Attributes -------------------------- */
 //region
 
-	private static final ArrayList<Patient> patients = new ArrayList<Patient>();
+	public static final ArrayList<Patient> patients = new ArrayList<Patient>();
 	private static final ArrayList<Service> services = new ArrayList<Service>();
 	private static final TreeMap<Service, TreeMap<LocalDate, TreeMap<LocalTime, Slot>>> slots = new TreeMap<>();
 
@@ -50,15 +49,33 @@ public final class AdminRepository {
 	 */
 	public static void initializeData() {
 
-		//	Clear all data
-		patients.clear();
-		services.clear();
-		slots.clear();
+		//	Initialize lists for the data to be stored in
+		ArrayList<Patient> patientList = new ArrayList<Patient>(); 
+		ArrayList<Service> serviceList = new ArrayList<Service>(); 
+		TreeMap<Service, TreeMap<LocalDate, TreeMap<LocalTime, Slot>>> slotList = new TreeMap<>(); 
 
-		//	Try and fetch data from files if they exist
-		if (new File(DataType.PATIENT.getFileName()).exists()) patients.addAll((ArrayList<Patient>) RepoUtils.loadDataFromFile(DataType.PATIENT));
-		if (new File(DataType.SERVICE.getFileName()).exists()) services.addAll((ArrayList<Service>) RepoUtils.loadDataFromFile(DataType.SERVICE));
-		if (new File(DataType.SLOT.getFileName()).exists()) slots.putAll((TreeMap<Service, TreeMap<LocalDate, TreeMap<LocalTime, Slot>>>) RepoUtils.loadDataFromFile(DataType.SLOT));
+		//	Try to initialize the data
+		try {
+
+			//	Try and fetch data from files if they exist
+			patientList = (ArrayList<Patient>) RepoUtils.loadDataFromFile(DataType.PATIENT);
+			serviceList = (ArrayList<Service>) RepoUtils.loadDataFromFile(DataType.SERVICE);
+			slotList = (TreeMap<Service, TreeMap<LocalDate, TreeMap<LocalTime, Slot>>>) RepoUtils.loadDataFromFile(DataType.SLOT);
+
+		}
+		catch (Exception e) {
+
+			//	If an error occurs then reset all lists to avoid errors
+			patientList.clear();
+			serviceList.clear();
+			slotList.clear();
+
+		}
+
+		//	Add the results to the local lists
+		patients.addAll(patientList);
+		services.addAll(serviceList);
+		slots.putAll(slotList);
 
 	}
 
