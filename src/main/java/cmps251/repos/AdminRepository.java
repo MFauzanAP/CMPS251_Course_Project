@@ -1,14 +1,14 @@
-package repos;
+package cmps251.repos;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.TreeMap;
 
-import models.Patient;
-import models.Service;
-import models.Slot;
-import utils.RepoUtils;
-import utils.RepoUtils.DataType;
+import cmps251.models.Patient;
+import cmps251.models.Service;
+import cmps251.models.Slot;
+import cmps251.utils.RepoUtils;
+import cmps251.utils.RepoUtils.DataType;
 
 /**
  * This class contains all the data related operations and functions in the Sehha hospital reception system

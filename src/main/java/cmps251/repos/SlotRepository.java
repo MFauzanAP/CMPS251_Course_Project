@@ -1,4 +1,4 @@
-package repos;
+package cmps251.repos;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -6,11 +6,11 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import exceptions.IllegalSlotTimeException;
-import models.Patient;
-import models.Service;
-import models.Slot;
-import utils.TimeUtils;
+import cmps251.exceptions.IllegalSlotTimeException;
+import cmps251.models.Patient;
+import cmps251.models.Service;
+import cmps251.models.Slot;
+import cmps251.utils.TimeUtils;
 
 /**
  * This class contains all the data related operations and functions for slots in the Sehha hospital reception system
@@ -21,10 +21,10 @@ import utils.TimeUtils;
  * <p> <i>Created on 18/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.13
+ * @version		1.14
  * @since		1.12
  */
-public class SlotRepository {
+public final class SlotRepository {
 
 
 

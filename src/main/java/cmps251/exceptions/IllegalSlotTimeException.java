@@ -1,4 +1,4 @@
-package exceptions;
+package cmps251.exceptions;
 
 /**
  * This is an exception that occurs when a slot constructor is given an incorrect time.

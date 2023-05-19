@@ -1,13 +1,13 @@
-package models;
+package cmps251.models;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-import exceptions.IllegalSlotDateException;
-import exceptions.IllegalSlotTimeException;
-import utils.TimeUtils;
+import cmps251.exceptions.IllegalSlotDateException;
+import cmps251.exceptions.IllegalSlotTimeException;
+import cmps251.utils.TimeUtils;
 
 
 /**
@@ -20,7 +20,7 @@ import utils.TimeUtils;
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.13
+ * @version		1.14
  * @since		1.0
  */
 public class Slot extends Identifiable {
@@ -146,7 +146,9 @@ public class Slot extends Identifiable {
 		if (allocatedService == null || allocatedPatient == null) throw new IllegalArgumentException("Given service or patient cannot be null!");
 
 		//	Reserve this slot for the given service and patient
-		this.reserve(allocatedService, allocatedPatient);
+		this.setBooked(true);
+		this.setAllocatedService(allocatedService);
+		this.setAllocatedPatient(allocatedPatient);
 
 	}
 	public Slot(LocalDate date, LocalTime time, Service allocatedService, Patient allocatedPatient) {
@@ -529,53 +531,6 @@ public class Slot extends Identifiable {
 
 //endregion
 
-
-
-/* ------------------------------ Logic Methods ----------------------------- */
-//region
-
-	/**
-	 * Reserves this slot for the given service and patient.
-	 * 
-	 * <p> <b>NOTE</b>: this method does not check whether for accurate business logic.
-	 * This should be implemented in the {@code AdminApp} class!
-	 * 
-	 * @param service					- the service to allocate for this slot
-	 * @param patient					- the patient to allocate for this slot
-	 * 
-	 * @throws IllegalStateException	if the slot has been previously booked
-	 */
-	public void reserve(Service service, Patient patient) {
-
-		//	If this service has already been booked
-		if (this.isBooked()) throw new IllegalStateException("This service has already been booked!");
-
-		//	Reserve slot for the given service and patient
-		this.setBooked(true);
-		this.setAllocatedService(allocatedService);
-		this.setAllocatedPatient(allocatedPatient);
-
-	}
-
-	/**
-	 * Cancels this slot's reservation
-	 * 
-	 * <p> <b>NOTE</b>: this method does not check whether for accurate business logic.
-	 * This should be implemented in the {@code AdminApp} class!
-	 * 
-	 * @throws IllegalStateException	if the slot has not been previously booked
-	 */
-	public void cancel() {
-
-		//	If this service has not been booked
-		if (!this.isBooked()) throw new IllegalStateException("This service has not yet been booked!");
-
-		//	Cancel slot reservation
-		this.setBooked(false);
-
-	}
-
-//endregion
 
 
 }

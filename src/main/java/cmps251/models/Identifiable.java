@@ -1,4 +1,4 @@
-package models;
+package cmps251.models;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -81,7 +81,6 @@ public abstract class Identifiable implements Serializable {
 	 * <ol>
 	 * 		<li> Get the class name of the object
 	 * 		<li> Fetch the current system datetime
-	 * 		<li> Generate a random 4 digit number
 	 * 		<li> Concatenate these two numbers together
 	 * 		<li> Set the new id as this concatenation
 	 * </ol>
@@ -105,7 +104,7 @@ public abstract class Identifiable implements Serializable {
 
 		//	Generate a random 4 digit number
 		Random rand = new Random();
-		int randInt = rand.nextInt(0, 9999);
+		int randInt = rand.nextInt(9999);
 
 		//	Concatenate the datetime and random number together
 		String idConcat = String.format("%s%04d%02d%02d%02d%02d%02d%04d", className, year, month, day, hour, minute, second, randInt);

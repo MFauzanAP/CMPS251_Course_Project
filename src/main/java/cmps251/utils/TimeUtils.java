@@ -1,11 +1,11 @@
-package utils;
+package cmps251.utils;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-import models.Slot;
+import cmps251.models.Slot;
 
 /**
  * This class offers some utility methods related to time

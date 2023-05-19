@@ -1,7 +1,7 @@
-package models;
+package cmps251.models;
 
-import exceptions.IllegalPatientIdException;
-import exceptions.IllegalPatientNameException;
+import cmps251.exceptions.IllegalPatientIdException;
+import cmps251.exceptions.IllegalPatientNameException;
 
 /**
  * This class serves as the main class for Patient objects in the Sehha hospital reception system

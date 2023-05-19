@@ -1,4 +1,4 @@
-package utils;
+package cmps251.utils;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

@@ -1,9 +1,9 @@
-package repos;
+package cmps251.repos;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import models.Service;
+import cmps251.models.Service;
 
 /**
  * This class contains all the data related operations and functions for services in the Sehha hospital reception system
@@ -14,10 +14,10 @@ import models.Service;
  * <p> <i>Created on 18/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.13
+ * @version		1.14
  * @since		1.12
  */
-public class ServiceRepository {
+public final class ServiceRepository {
 
 
 

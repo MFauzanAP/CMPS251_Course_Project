@@ -1,9 +1,9 @@
-package models;
+package cmps251.models;
 
 import java.util.Comparator;
 
-import exceptions.IllegalServiceMaxSlotsException;
-import exceptions.IllegalServicePriceException;
+import cmps251.exceptions.IllegalServiceMaxSlotsException;
+import cmps251.exceptions.IllegalServicePriceException;
 
 /**
  * This class serves as the main class for Service objects in the Sehha hospital reception system

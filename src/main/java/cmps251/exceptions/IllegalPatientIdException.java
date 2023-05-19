@@ -1,4 +1,4 @@
-package exceptions;
+package cmps251.exceptions;
 
 /**
  * This is an exception that occurs when a patient is given an invalid id.

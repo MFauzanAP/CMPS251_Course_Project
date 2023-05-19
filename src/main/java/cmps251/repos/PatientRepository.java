@@ -1,10 +1,10 @@
-package repos;
+package cmps251.repos;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import models.Patient;
-import models.Patient.ResidencyType;
+import cmps251.models.Patient;
+import cmps251.models.Patient.ResidencyType;
 
 /**
  * This class contains all the data related operations and functions for patients in the Sehha hospital reception system
@@ -15,10 +15,10 @@ import models.Patient.ResidencyType;
  * <p> <i>Created on 18/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.13
+ * @version		1.14
  * @since		1.12
  */
-public class PatientRepository {
+public final class PatientRepository {
 
 
 
