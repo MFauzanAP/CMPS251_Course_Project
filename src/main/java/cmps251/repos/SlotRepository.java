@@ -419,7 +419,6 @@ public final class SlotRepository {
 		return getSlotByDateTimeService(LocalDateTime.of(date, time), service.getId());
 	}
 
-
 	/** 
 	 * Returns the booked slot for the given date, time, and patient
 	 * 
@@ -539,7 +538,6 @@ public final class SlotRepository {
 		return getSlotsByTimeServicePatient(time, service.getId(), patient.getId());
 	}
 
-
 	/** 
 	 * Returns a list of slots for the given date that are available.
 	 * Note that this date cannot be in the past!
@@ -561,7 +559,7 @@ public final class SlotRepository {
 
 			//	Loop through each time interval in the day
 			ArrayList<LocalTime> intervals = TimeUtils.getDateTimeIntervals(date);
-			TreeMap<LocalTime, Slot> allSlots = slots.getOrDefault(service, new TreeMap<>()).getOrDefault(date, new TreeMap<>());
+			TreeMap<LocalTime, Slot> allSlots = slots.getOrDefault(service.getId(), new TreeMap<>()).getOrDefault(date, new TreeMap<>());
 			for (LocalTime time : intervals) {
 
 				//	Catch illegal slot time exceptions

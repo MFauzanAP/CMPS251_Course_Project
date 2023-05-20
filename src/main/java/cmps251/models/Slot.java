@@ -468,7 +468,7 @@ public class Slot extends Identifiable {
 
 		//	If the given slot's service has reached the maximum number of bookings for the day
 		if (SlotRepository.getSlotsByDateService(date, service).size() >= slot.getAllocatedService().getMaxSlots()) {
-			String errorMessage = "This slot has reached the maximum number of bookings for the day!";
+			String errorMessage = "This slot has reached the maximum number of bookings for the day (" + slot.getAllocatedService().getMaxSlots() + ")!";
 			if (throwError) throw new IllegalSlotDateException(errorMessage);
 			return errorMessage;
 		}

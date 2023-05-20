@@ -1,5 +1,6 @@
 package cmps251;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -45,6 +46,8 @@ public class MainController {
 
 /* --------------------------- Constant Attributes -------------------------- */
 //region
+
+	public static MainController scene;
 
 	ObservableList<Slot> slots = FXCollections.observableArrayList(SlotRepository.getSlotsAsList());
 	ObservableList<Service> services = FXCollections.observableArrayList(ServiceRepository.getServicesAsList());
@@ -93,6 +96,12 @@ public class MainController {
     @FXML
     private TableColumn<Slot, Button> colSlotsEdit;
 
+	@FXML
+    private Button printSlotsButton;
+
+    @FXML
+    private Button addSlotButton;
+
     @FXML
     private Tab tabServices;
 
@@ -117,6 +126,12 @@ public class MainController {
     @FXML
     private TableColumn<Service, Button> colServicesEdit;
 
+	@FXML
+    private Button printServicesButton;
+
+    @FXML
+    private Button addServiceButton;
+
     @FXML
     private Tab tabPatients;
 
@@ -138,6 +153,12 @@ public class MainController {
     @FXML
     private TableColumn<Patient, Button> colPatientsEdit;
 
+	@FXML
+    private Button printPatientsButton;
+
+    @FXML
+    private Button addPatientButton;
+
 //endregion
 
 
@@ -154,6 +175,7 @@ public class MainController {
 		assertComponents();
 		setFactories();
 		setObservables();
+		scene = this;
 	}
 
 //endregion
@@ -241,6 +263,8 @@ public class MainController {
         assert colSlotsService != null : "fx:id=\"colSlotsService\" was not injected: check your FXML file 'main.fxml'.";
         assert colSlotsPatient != null : "fx:id=\"colSlotsPatient\" was not injected: check your FXML file 'main.fxml'.";
         assert colSlotsEdit != null : "fx:id=\"colSlotsEdit\" was not injected: check your FXML file 'main.fxml'.";
+        assert printSlotsButton != null : "fx:id=\"printSlotsButton\" was not injected: check your FXML file 'main.fxml'.";
+        assert addSlotButton != null : "fx:id=\"addSlotButton\" was not injected: check your FXML file 'main.fxml'.";
         assert tabServices != null : "fx:id=\"tabServices\" was not injected: check your FXML file 'main.fxml'.";
         assert servicesSearchBox != null : "fx:id=\"servicesSearchBox\" was not injected: check your FXML file 'main.fxml'.";
         assert tableServices != null : "fx:id=\"tableServices\" was not injected: check your FXML file 'main.fxml'.";
@@ -249,6 +273,8 @@ public class MainController {
         assert colServicesMaxSlots != null : "fx:id=\"colServicesMaxSlots\" was not injected: check your FXML file 'main.fxml'.";
         assert colServicesSlots != null : "fx:id=\"colServicesSlots\" was not injected: check your FXML file 'main.fxml'.";
         assert colServicesEdit != null : "fx:id=\"colServicesEdit\" was not injected: check your FXML file 'main.fxml'.";
+        assert printServicesButton != null : "fx:id=\"printServicesButton\" was not injected: check your FXML file 'main.fxml'.";
+        assert addServiceButton != null : "fx:id=\"addServiceButton\" was not injected: check your FXML file 'main.fxml'.";
         assert tabPatients != null : "fx:id=\"tabPatients\" was not injected: check your FXML file 'main.fxml'.";
         assert patientsSearchBox != null : "fx:id=\"patientsSearchBox\" was not injected: check your FXML file 'main.fxml'.";
         assert tablePatients != null : "fx:id=\"tablePatients\" was not injected: check your FXML file 'main.fxml'.";
@@ -256,6 +282,8 @@ public class MainController {
         assert colPatientsName != null : "fx:id=\"colPatientsName\" was not injected: check your FXML file 'main.fxml'.";
         assert colPatientsSlots != null : "fx:id=\"colPatientsSlots\" was not injected: check your FXML file 'main.fxml'.";
         assert colPatientsEdit != null : "fx:id=\"colPatientsEdit\" was not injected: check your FXML file 'main.fxml'.";
+        assert printPatientsButton != null : "fx:id=\"printPatientsButton\" was not injected: check your FXML file 'main.fxml'.";
+        assert addPatientButton != null : "fx:id=\"addPatientButton\" was not injected: check your FXML file 'main.fxml'.";
 	}
 
 	/**
@@ -309,6 +337,22 @@ public class MainController {
 		patientsSearchBox.setItems(patientNames);
 	}
 
+	public void refreshAll() {
+		if (slotsDateBox != null) slotsDateBox.setValue(null);
+		if (slotsServiceBox != null) slotsServiceBox.setValue(null);
+		if (slotsPatientBox != null) slotsPatientBox.setValue(null);
+		if (servicesSearchBox != null) servicesSearchBox.setValue(null);
+		if (patientsSearchBox != null) patientsSearchBox.setValue(null);
+
+		this.slots.setAll(SlotRepository.getSlotsAsList());
+		this.serviceTitles.setAll(getServiceTitles(getSlotServices(this.slots)));
+		this.patientNames.setAll(getPatientNames(getSlotPatients(this.slots)));
+		this.services.setAll(ServiceRepository.getServicesAsList());
+		this.serviceTitles.setAll(getServiceTitles(this.services));
+		this.patients.setAll(PatientRepository.getPatientsAsList());
+		this.patientNames.setAll(getPatientNames(this.patients));
+	}
+
 //endregion
 
 
@@ -324,7 +368,7 @@ public class MainController {
 		if (slotsDateBox != null) slotsDateBox.setValue(null);
 		if (slotsServiceBox != null) slotsServiceBox.setValue(null);
 		if (slotsPatientBox != null) slotsPatientBox.setValue(null);
-		if (servicesSearchBox != null) servicesSearchBox.setValue(null);;
+		if (servicesSearchBox != null) servicesSearchBox.setValue(null);
 		if (patientsSearchBox != null) patientsSearchBox.setValue(null);
 
 		if (event.getTarget().equals(tabSlots)) {
@@ -370,6 +414,27 @@ public class MainController {
 		if (event.getTarget().equals(patientsSearchBox) && patientsSearch != null) {
 			if (!patientsSearch.isBlank()) this.patients.setAll(PatientRepository.getPatientsByName(patientsSearch));
 			else this.patients.setAll(PatientRepository.getPatientsAsList());
+		}
+    }
+
+	/**
+	 * Function called when the user clicks on the print data button
+	 */
+	@FXML
+    private void handlePrintData(Event event) {
+		
+    }
+
+	/**
+	 * Function called when the user clicks on the add data button
+	 */
+	@FXML
+    private void handleAddData(Event event) {
+		try {
+			App.newWindow("add_slot", 450, 291);
+		}
+		catch (IOException e) {
+			System.err.println("Unable to find add_slot.fxml!");
 		}
     }
 
