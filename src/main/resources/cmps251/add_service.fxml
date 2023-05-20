@@ -35,9 +35,9 @@
                   <Label text="Title" />
                   <TextField fx:id="serviceTitle" prefWidth="160.0" promptText="Enter service title..." GridPane.columnIndex="1" />
                   <Label text="Max. Slots per Day" GridPane.rowIndex="1" />
-                  <TextField fx:id="serviceMaxSlots" onAction="#handleNumericChange" prefWidth="160.0" promptText="Enter maximum slots..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="serviceMaxSlots" prefWidth="160.0" promptText="Enter maximum slots..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label text="Price per Slot" GridPane.rowIndex="2" />
-                  <TextField fx:id="servicePricePerSlot" onAction="#handleNumericChange" prefWidth="160.0" promptText="Enter price per slot..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="servicePricePerSlot" prefWidth="160.0" promptText="Enter price per slot..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
             </GridPane>
             <ButtonBar>

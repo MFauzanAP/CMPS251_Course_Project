@@ -37,7 +37,7 @@ import javafx.util.Callback;
  * <p> <i>Created on 19/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.20
+ * @version		1.21
  * @since		1.14
  */
 public class MainController {
@@ -433,6 +433,7 @@ public class MainController {
 		try {
 			if (event.getTarget().equals(addSlotButton)) App.newWindow("add_slot", 450, 291);
 			if (event.getTarget().equals(addServiceButton)) App.newWindow("add_service", 321.6, 248);
+			if (event.getTarget().equals(addPatientButton)) App.newWindow("add_patient", 321.6, 248);
 		}
 		catch (IOException e) {
 			System.err.println("Unable to find the following file!");

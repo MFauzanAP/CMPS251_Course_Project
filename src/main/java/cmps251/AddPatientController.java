@@ -1,29 +1,33 @@
 package cmps251;
 
-import cmps251.models.Service;
-import cmps251.repos.ServiceRepository;
+import cmps251.models.Patient;
+import cmps251.models.Patient.ResidencyType;
+import cmps251.repos.PatientRepository;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
 /**
- * Controller class for the add_service.fxml scene
+ * Controller class for the add_patient.fxml scene
  * 
  * <p> <i>Created on 20/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
  * @version		1.21
- * @since		1.20
+ * @since		1.21
  */
-public class AddServiceController {
+public class AddPatientController {
 
 
 
@@ -38,13 +42,13 @@ public class AddServiceController {
 //region
 
 	@FXML
-	private TextField serviceTitle;
+	private TextField patientId;
 
 	@FXML
-	private TextField serviceMaxSlots;
+	private TextField patientName;
 
 	@FXML
-	private TextField servicePricePerSlot;
+	private ComboBox<String> patientResidency;
 
 	@FXML
 	private Button cancelButton;
@@ -88,11 +92,11 @@ public class AddServiceController {
 	 * Makes sure all components are initialized properly and with the correct names
 	 */
 	private void assertComponents() {
-		assert serviceTitle != null : "fx:id=\"serviceTitle\" was not injected: check your FXML file 'add_service.fxml'.";
-        assert serviceMaxSlots != null : "fx:id=\"serviceMaxSlots\" was not injected: check your FXML file 'add_service.fxml'.";
-        assert servicePricePerSlot != null : "fx:id=\"servicePricePerSlot\" was not injected: check your FXML file 'add_service.fxml'.";
-        assert cancelButton != null : "fx:id=\"cancelButton\" was not injected: check your FXML file 'add_service.fxml'.";
-        assert submitButton != null : "fx:id=\"submitButton\" was not injected: check your FXML file 'add_service.fxml'.";
+		assert patientId != null : "fx:id=\"patientId\" was not injected: check your FXML file 'add_patient.fxml'.";
+        assert patientName != null : "fx:id=\"patientName\" was not injected: check your FXML file 'add_patient.fxml'.";
+        assert patientResidency != null : "fx:id=\"patientResidency\" was not injected: check your FXML file 'add_patient.fxml'.";
+        assert cancelButton != null : "fx:id=\"cancelButton\" was not injected: check your FXML file 'add_patient.fxml'.";
+        assert submitButton != null : "fx:id=\"submitButton\" was not injected: check your FXML file 'add_patient.fxml'.";
 	}
 
 	/**
@@ -105,21 +109,15 @@ public class AddServiceController {
 	 * Assigns variables to observables in the scene
 	 */
 	private void setObservables() {
-		serviceMaxSlots.textProperty().addListener(new ChangeListener<String>() {
+		ObservableList<String> residencyTypes = FXCollections.observableArrayList();
+		for (ResidencyType value : ResidencyType.values()) residencyTypes.add(value.toString());
+		patientResidency.getItems().setAll(residencyTypes);
+		patientId.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, 
 				String newValue) {
 				if (!newValue.matches("\\d*")) {
-					serviceMaxSlots.setText(newValue.replaceAll("[^\\d]", ""));
-				}
-			}
-		});
-		servicePricePerSlot.textProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, 
-				String newValue) {
-				if (!newValue.matches("^\\d*\\.\\d+|\\d+\\.\\d*$")) {
-					servicePricePerSlot.setText(newValue.replaceAll("[^\\d.]", ""));
+					patientId.setText(newValue.replaceAll("[^\\d]", ""));
 				}
 			}
 		});
@@ -147,10 +145,10 @@ public class AddServiceController {
     @FXML
     void handleSubmitForm(Event event) {
 		try {
-			String title = serviceTitle.getText();
-			int maxSlots = Integer.parseInt(serviceMaxSlots.getText());
-			double pricePerSlot = Integer.parseInt(servicePricePerSlot.getText());
-			ServiceRepository.addService(new Service(title, maxSlots, pricePerSlot));
+			String id = patientId.getText();
+			String name = patientName.getText();
+			ResidencyType residency = ResidencyType.valueOf(patientResidency.getValue());
+			PatientRepository.addPatient(new Patient(id, name, residency));
 			MainController.scene.refreshAll();
 			Stage stage = (Stage) cancelButton.getScene().getWindow();
 			stage.close();
