@@ -20,7 +20,7 @@ import javafx.stage.Stage;
  * <p> <i>Created on 20/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.21
+ * @version		1.22
  * @since		1.20
  */
 public class AddServiceController {
@@ -30,6 +30,10 @@ public class AddServiceController {
 /* --------------------------- Constant Attributes -------------------------- */
 //region
 
+	public static AddServiceController scene;
+	public boolean editing = false;
+	public Service data;
+
 //endregion
 
 
@@ -38,13 +42,13 @@ public class AddServiceController {
 //region
 
 	@FXML
-	private TextField serviceTitle;
+	public TextField serviceTitle;
 
 	@FXML
-	private TextField serviceMaxSlots;
+	public TextField serviceMaxSlots;
 
 	@FXML
-	private TextField servicePricePerSlot;
+	public TextField servicePricePerSlot;
 
 	@FXML
 	private Button cancelButton;
@@ -68,6 +72,7 @@ public class AddServiceController {
 		assertComponents();
 		setFactories();
 		setObservables();
+		scene = this;
 	}
 
 //endregion
@@ -147,10 +152,12 @@ public class AddServiceController {
     @FXML
     void handleSubmitForm(Event event) {
 		try {
+			if (serviceTitle.getText() == null || serviceTitle.getText().isBlank() || serviceMaxSlots.getText() == null || serviceMaxSlots.getText().isBlank() || servicePricePerSlot.getText() == null || servicePricePerSlot.getText().isBlank()) throw new Exception("Please enter all the required data");
 			String title = serviceTitle.getText();
 			int maxSlots = Integer.parseInt(serviceMaxSlots.getText());
-			double pricePerSlot = Integer.parseInt(servicePricePerSlot.getText());
-			ServiceRepository.addService(new Service(title, maxSlots, pricePerSlot));
+			double pricePerSlot = Double.parseDouble(servicePricePerSlot.getText());
+			if (!editing) ServiceRepository.addService(new Service(title, maxSlots, pricePerSlot));
+			else ServiceRepository.updateService(data.getId(), new Service(title, maxSlots, pricePerSlot));
 			MainController.scene.refreshAll();
 			Stage stage = (Stage) cancelButton.getScene().getWindow();
 			stage.close();

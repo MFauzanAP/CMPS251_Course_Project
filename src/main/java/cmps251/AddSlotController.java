@@ -32,7 +32,7 @@ import javafx.stage.Stage;
  * <p> <i>Created on 20/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.20
+ * @version		1.22
  * @since		1.19
  */
 public class AddSlotController {
@@ -41,6 +41,10 @@ public class AddSlotController {
 
 /* --------------------------- Constant Attributes -------------------------- */
 //region
+
+	public static AddSlotController scene;
+	public boolean editing = false;
+	public Slot data;
 
 	ObservableList<Slot> availableSlots = FXCollections.observableArrayList();
 	ObservableList<String> times = FXCollections.observableArrayList();
@@ -55,16 +59,16 @@ public class AddSlotController {
 //region
 
 	@FXML
-	private DatePicker slotDate;
+	public DatePicker slotDate;
 
 	@FXML
-	private ComboBox<String> slotTime;
+	public ComboBox<String> slotTime;
 
 	@FXML
-	private ComboBox<String> slotService;
+	public ComboBox<String> slotService;
 
 	@FXML
-	private ComboBox<String> slotPatient;
+	public ComboBox<String> slotPatient;
 
 	@FXML
 	private Button cancelButton;
@@ -91,6 +95,7 @@ public class AddSlotController {
 		assertComponents();
 		setFactories();
 		setObservables();
+		scene = this;
 	}
 
 //endregion
@@ -201,6 +206,7 @@ public class AddSlotController {
 		Service service = slotService.getValue() != null && !slotService.getValue().isBlank() ? ServiceRepository.getServicesByTitle(slotService.getValue()).get(0) : null;
 		if (date != null && service != null) this.availableSlots.setAll(SlotRepository.getAvailableSlotsByDateService(date, service));
 		else if (date != null) this.availableSlots.setAll(SlotRepository.getAvailableSlotsByDate(date));
+		if (editing) this.availableSlots.add(data);
 		this.times.setAll(getSlotTime(availableSlots));
 		if (this.times.contains(time)) slotTime.setValue(time);
 		else slotTime.setValue(null);
@@ -222,10 +228,12 @@ public class AddSlotController {
     void handleSubmitForm(Event event) {
 		try {
 			LocalDate date = slotDate.getValue();
-			LocalTime time = LocalTime.parse(slotTime.getValue());
+			LocalTime time = slotTime.getValue() != null && !slotTime.getValue().isBlank() ? LocalTime.parse(slotTime.getValue()) : null;
 			Service service = slotService.getValue() != null && !slotService.getValue().isBlank() ? ServiceRepository.getServicesByTitle(slotService.getValue()).get(0) : null;
 			Patient patient = slotPatient.getValue() != null && !slotPatient.getValue().isBlank() ? PatientRepository.getPatientsByName(slotPatient.getValue()).get(0) : null;
-			SlotRepository.bookSlot(date, time, service, patient);
+			if (date == null || time == null || service == null || patient == null) throw new Exception("Please enter all the required data");
+			if (!editing) SlotRepository.bookSlot(date, time, service, patient);
+			else SlotRepository.updateSlot(data.getId(), new Slot(date, time, service, patient));
 			MainController.scene.refreshAll();
 			Stage stage = (Stage) cancelButton.getScene().getWindow();
 			stage.close();

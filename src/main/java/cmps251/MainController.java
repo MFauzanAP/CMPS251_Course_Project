@@ -37,7 +37,7 @@ import javafx.util.Callback;
  * <p> <i>Created on 19/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.21
+ * @version		1.22
  * @since		1.14
  */
 public class MainController {
@@ -304,20 +304,20 @@ public class MainController {
 				return new SimpleStringProperty(slot.getValue().getAllocatedPatient().getName());
 			}
 		});
-		colSlotsEdit.setCellFactory((TableCellButton.createCellButton("Edit", null)));
+		colSlotsEdit.setCellFactory(TableCellButton.createCellButton("Edit", (Slot slot) -> { handleEditData(slot); return slot; }));
 
 		//	Set service table factories
 		colServicesTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
 		colServicesPricePerSlot.setCellValueFactory(new PropertyValueFactory<>("pricePerSlot"));
 		colServicesMaxSlots.setCellValueFactory(new PropertyValueFactory<>("maxSlots"));
 		colServicesSlots.setCellFactory(TableCellButton.createCellButton("View Slots", (Service service) -> { handleViewSlotPress(service); return service; }));
-		colServicesEdit.setCellFactory(TableCellButton.createCellButton("Edit", null));
+		colServicesEdit.setCellFactory(TableCellButton.createCellButton("Edit", (Service service) -> { handleEditData(service); return service; }));
 
 		//	Set patient table factories
 		colPatientsId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colPatientsName.setCellValueFactory(new PropertyValueFactory<>("name"));
 		colPatientsSlots.setCellFactory(TableCellButton.createCellButton("View Slots", (Patient patient) -> { handleViewSlotPress(patient); return patient; }));
-		colPatientsEdit.setCellFactory(TableCellButton.createCellButton("Edit", null));
+		colPatientsEdit.setCellFactory(TableCellButton.createCellButton("Edit", (Patient patient) -> { handleEditData(patient); return patient; }));
 
 	}
 
@@ -337,6 +337,9 @@ public class MainController {
 		patientsSearchBox.setItems(patientNames);
 	}
 
+	/**
+	 * Refreshes all the tabs in the scene
+	 */
 	public void refreshAll() {
 		if (slotsDateBox != null) slotsDateBox.setValue(null);
 		if (slotsServiceBox != null) slotsServiceBox.setValue(null);
@@ -457,6 +460,47 @@ public class MainController {
 			Patient patient = (Patient) object;
 			slotsPatientBox.setValue(patient.getName());
 			this.slots.setAll(SlotRepository.getSlotsByPatient(patient));
+		}
+    }
+
+	/**
+	 * Function called when the user clicks on the edit data button
+	 */
+	@FXML
+    private void handleEditData(Object object) {
+		try {
+			if (object instanceof Slot) {
+				Slot slot = (Slot) object;
+				App.newWindow("add_slot", 450, 291);
+				AddSlotController.scene.editing = true;
+				AddSlotController.scene.data = SlotRepository.getSlotById(slot.getId());
+				AddSlotController.scene.slotDate.setValue(slot.getDate());
+				AddSlotController.scene.slotTime.setValue(slot.getTime().toString());
+				AddSlotController.scene.slotService.setValue(slot.getAllocatedService().getTitle());
+				AddSlotController.scene.slotPatient.setValue(slot.getAllocatedPatient().getName());
+			}
+			if (object instanceof Service) {
+				Service service = (Service) object;
+				App.newWindow("add_service", 321.6, 248);
+				AddServiceController.scene.editing = true;
+				AddServiceController.scene.data = ServiceRepository.getServiceById(service.getId());
+				AddServiceController.scene.serviceTitle.setText(service.getTitle());
+				AddServiceController.scene.serviceMaxSlots.setText(String.valueOf(service.getMaxSlots()));
+				AddServiceController.scene.servicePricePerSlot.setText(String.valueOf(service.getPricePerSlot()));
+			}
+			if (object instanceof Patient) {
+				Patient patient = (Patient) object;
+				App.newWindow("add_patient", 321.6, 248);
+				AddPatientController.scene.editing = true;
+				AddPatientController.scene.data = PatientRepository.getPatientById(patient.getId());
+				AddPatientController.scene.patientId.setText(patient.getId());
+				AddPatientController.scene.patientName.setText(patient.getName());
+				AddPatientController.scene.patientResidency.setValue(patient.getResidency().toString());
+			}
+		}
+		catch (IOException e) {
+			System.err.println("Unable to find the following file!");
+			System.err.println(e.getMessage());
 		}
     }
 

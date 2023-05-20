@@ -24,7 +24,7 @@ import javafx.stage.Stage;
  * <p> <i>Created on 20/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.21
+ * @version		1.22
  * @since		1.21
  */
 public class AddPatientController {
@@ -34,6 +34,10 @@ public class AddPatientController {
 /* --------------------------- Constant Attributes -------------------------- */
 //region
 
+	public static AddPatientController scene;
+	public boolean editing = false;
+	public Patient data;
+
 //endregion
 
 
@@ -42,13 +46,13 @@ public class AddPatientController {
 //region
 
 	@FXML
-	private TextField patientId;
+	public TextField patientId;
 
 	@FXML
-	private TextField patientName;
+	public TextField patientName;
 
 	@FXML
-	private ComboBox<String> patientResidency;
+	public ComboBox<String> patientResidency;
 
 	@FXML
 	private Button cancelButton;
@@ -72,6 +76,7 @@ public class AddPatientController {
 		assertComponents();
 		setFactories();
 		setObservables();
+		scene = this;
 	}
 
 //endregion
@@ -145,10 +150,12 @@ public class AddPatientController {
     @FXML
     void handleSubmitForm(Event event) {
 		try {
+			if (patientId.getText() == null || patientId.getText().isBlank() || patientName.getText() == null || patientName.getText().isBlank() || patientResidency.getValue() == null) throw new Exception("Please enter all the required data");
 			String id = patientId.getText();
 			String name = patientName.getText();
 			ResidencyType residency = ResidencyType.valueOf(patientResidency.getValue());
-			PatientRepository.addPatient(new Patient(id, name, residency));
+			if (!editing) PatientRepository.addPatient(new Patient(id, name, residency));
+			else PatientRepository.updatePatient(data.getId(), new Patient(id, name, residency));
 			MainController.scene.refreshAll();
 			Stage stage = (Stage) cancelButton.getScene().getWindow();
 			stage.close();
