@@ -291,7 +291,7 @@ public class Service extends Identifiable implements Comparable<Service> {
 
 		//	Get the hashcode for the title and concatenate the property values
 		int titleHash = this.title.hashCode();
-		int classHash = Integer.parseInt(Integer.toString(titleHash) + Integer.toString(this.maxSlots) + Double.toString(this.pricePerSlot));
+		int classHash = titleHash + this.maxSlots + (int)this.pricePerSlot;
 
 		//	Return the class hash value
 		return classHash;

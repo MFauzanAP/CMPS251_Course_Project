@@ -26,7 +26,7 @@ import cmps251.repos.SlotRepository;
  * <p> <i>Created on 19/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.16
+ * @version		1.18
  * @since		1.14
  */
 public class App extends Application {
@@ -56,10 +56,15 @@ public class App extends Application {
         ServiceRepository.addService(new Service("Specialized", 10, 150));
         ServiceRepository.addService(new Service("Operation", 5, 1000));
 
-        ArrayList<Slot> availableSlots = SlotRepository.getAvailableSlotsByDateService(LocalDate.now(), ServiceRepository.getServicesByTitle("Operation").get(0));
-        SlotRepository.bookSlot(availableSlots.get(0), patient);
-        SlotRepository.bookSlot(availableSlots.get(1), patient);
-        SlotRepository.bookSlot(availableSlots.get(3), patient);
+        ArrayList<Slot> availableSlots1 = SlotRepository.getAvailableSlotsByDateService(LocalDate.now().plusDays(1), ServiceRepository.getServicesByTitle("Operation").get(0));
+        SlotRepository.bookSlot(availableSlots1.get(0), patient);
+        SlotRepository.bookSlot(availableSlots1.get(1), patient);
+        SlotRepository.bookSlot(availableSlots1.get(3), patient);
+
+        ArrayList<Slot> availableSlots2 = SlotRepository.getAvailableSlotsByDateService(LocalDate.now().plusDays(1), ServiceRepository.getServicesByTitle("Generic").get(0));
+        SlotRepository.bookSlot(availableSlots2.get(4), patient);
+        SlotRepository.bookSlot(availableSlots2.get(5), patient);
+        SlotRepository.bookSlot(availableSlots2.get(6), patient);
 
         // PatientRepository.updatePatientName(patient, "New name");
         // SlotRepository.updateSlotTime(availableSlots.get(0), LocalTime.parse("20:30"));

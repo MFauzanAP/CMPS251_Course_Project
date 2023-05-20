@@ -342,6 +342,41 @@ public final class SlotRepository {
 	}
 
 	/** 
+	 * Returns a list of booked slots for the given service under the given patient.
+	 * 
+	 * @param service				- the service to check slots for
+	 * @param patient				- the patient to fetch slots for
+	 * 
+	 * @return ArrayList<Slot>		- a list of booked slots under the given patient and service
+	 */
+	public static ArrayList<Slot> getSlotsByServicePatient(String service, String patient) {
+
+		//	Create a new list of slots to be returned
+		ArrayList<Slot> outputList = new ArrayList<>();
+
+		//	If a service or patient is not given, return an empty list
+		if (service == null || patient == null) return outputList;
+
+		//	Loop through each slot under this service and return those with the given patient
+		for (Slot slot : getSlotsByService(service)) {
+			if (slot.getAllocatedPatient().getId().equals(patient)) outputList.add(slot);
+		}
+
+		//	Return the given service slots
+		return outputList;
+
+	}
+	public static ArrayList<Slot> getSlotsByServicePatient(Service service, String patient) {
+		return getSlotsByServicePatient(service.getId(), patient);
+	}
+	public static ArrayList<Slot> getSlotsByServicePatient(String service, Patient patient) {
+		return getSlotsByServicePatient(service, patient.getId());
+	}
+	public static ArrayList<Slot> getSlotsByServicePatient(Service service, Patient patient) {
+		return getSlotsByServicePatient(service.getId(), patient.getId());
+	}
+
+	/** 
 	 * Returns the booked slot for the given date, time, and service
 	 * 
 	 * @param datetime				- the datetime to fetch slots for

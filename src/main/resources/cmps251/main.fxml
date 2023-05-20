@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -13,7 +14,6 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
@@ -50,11 +50,11 @@
                            </padding>
                            <children>
                               <Label text="Date" />
-                              <DatePicker prefHeight="26.0" prefWidth="110.0" promptText="Enter date..." />
+                              <DatePicker fx:id="slotsDateBox" onAction="#handleFilterChange" prefHeight="26.0" prefWidth="110.0" promptText="Enter date..." />
                               <Label text="Service" />
-                              <TextField prefHeight="26.0" prefWidth="110.0" promptText="Enter service..." />
+                              <ComboBox fx:id="slotsServiceBox" editable="true" onAction="#handleFilterChange" prefHeight="26.0" prefWidth="130.0" promptText="Enter service..." />
                               <Label text="Patient" />
-                              <TextField prefHeight="26.0" prefWidth="160.0" promptText="Enter patient..." />
+                              <ComboBox fx:id="slotsPatientBox" editable="true" onAction="#handleFilterChange" prefHeight="26.0" prefWidth="130.0" promptText="Enter patient..." />
                            </children>
                         </HBox>
                         <ScrollPane fitToWidth="true" layoutY="46.0" prefHeight="286.0" prefWidth="570.0">
@@ -95,8 +95,8 @@
                               <Insets bottom="10.0" left="16.0" right="16.0" top="10.0" />
                            </padding>
                            <children>
-                              <Label prefWidth="37.0" text="Search" />
-                              <TextField promptText="Enter service title..." />
+                              <Label text="Search" />
+                              <ComboBox fx:id="servicesSearchBox" editable="true" onAction="#handleFilterChange" prefHeight="26.0" prefWidth="200.0" promptText="Enter service title..." />
                            </children>
                         </HBox>
                         <ScrollPane fitToWidth="true" layoutY="46.0" prefHeight="286.0" prefWidth="570.0">
@@ -136,7 +136,7 @@
                            </padding>
                            <children>
                               <Label prefWidth="37.0" text="Search" />
-                              <TextField prefHeight="26.0" prefWidth="160.0" promptText="Enter patient ID or name..." />
+                              <ComboBox fx:id="patientsSearchBox" editable="true" onAction="#handleFilterChange" prefHeight="26.0" prefWidth="200.0" promptText="Enter patient name..." />
                            </children>
                         </HBox>
                         <ScrollPane fitToWidth="true" layoutY="46.0" prefHeight="286.0" prefWidth="570.0">
