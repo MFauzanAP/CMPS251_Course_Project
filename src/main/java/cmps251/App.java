@@ -47,27 +47,24 @@ public class App extends Application {
 
 	public static void main(String[] args) {
 
-		Patient patient = new Patient("12345678901", "Muhammad Putra", ResidencyType.RESIDENT);
-		PatientRepository.addPatient(patient);
-		PatientRepository.updatePatientId("12345678901", "68475684579");
+		// Patient patient = new Patient("12345678901", "Muhammad Putra", ResidencyType.RESIDENT);
+		// PatientRepository.addPatient(patient);
+		// PatientRepository.updatePatientId("12345678901", "68475684579");
 
-		ServiceRepository.addService(new Service("Procedure", 15, 50));
-		ServiceRepository.addService(new Service("Generic", 20, 100));
-		ServiceRepository.addService(new Service("Specialized", 10, 150));
-		ServiceRepository.addService(new Service("Operation", 5, 1000));
+		// ServiceRepository.addService(new Service("Procedure", 15, 50));
+		// ServiceRepository.addService(new Service("Generic", 20, 100));
+		// ServiceRepository.addService(new Service("Specialized", 10, 150));
+		// ServiceRepository.addService(new Service("Operation", 5, 1000));
 
-		ArrayList<Slot> availableSlots1 = SlotRepository.getAvailableSlotsByDateService(LocalDate.now().plusDays(1), ServiceRepository.getServicesByTitle("Operation").get(0));
-		SlotRepository.bookSlot(availableSlots1.get(0), patient);
-		SlotRepository.bookSlot(availableSlots1.get(1), patient);
-		SlotRepository.bookSlot(availableSlots1.get(3), patient);
+		// ArrayList<Slot> availableSlots1 = SlotRepository.getAvailableSlotsByDateService(LocalDate.now().plusDays(1), ServiceRepository.getServicesByTitle("Operation").get(0));
+		// SlotRepository.bookSlot(availableSlots1.get(0), patient);
+		// SlotRepository.bookSlot(availableSlots1.get(1), patient);
+		// SlotRepository.bookSlot(availableSlots1.get(3), patient);
 
-		ArrayList<Slot> availableSlots2 = SlotRepository.getAvailableSlotsByDateService(LocalDate.now().plusDays(1), ServiceRepository.getServicesByTitle("Generic").get(0));
-		SlotRepository.bookSlot(availableSlots2.get(4), patient);
-		SlotRepository.bookSlot(availableSlots2.get(5), patient);
-		SlotRepository.bookSlot(availableSlots2.get(6), patient);
-
-		// PatientRepository.updatePatientName(patient, "New name");
-		// SlotRepository.updateSlotTime(availableSlots.get(0), LocalTime.parse("20:30"));
+		// ArrayList<Slot> availableSlots2 = SlotRepository.getAvailableSlotsByDateService(LocalDate.now().plusDays(1), ServiceRepository.getServicesByTitle("Generic").get(0));
+		// SlotRepository.bookSlot(availableSlots2.get(4), patient);
+		// SlotRepository.bookSlot(availableSlots2.get(5), patient);
+		// SlotRepository.bookSlot(availableSlots2.get(6), patient);
 		
 		launch();
 	}
@@ -85,7 +82,7 @@ public class App extends Application {
 	 */
 	@Override
 	public void start(Stage stage) throws IOException {
-		// AdminRepository.initializeData();
+		AdminRepository.initializeData();
 		scene = new Scene(loadFXML("main"), 600, 400);
 		stage.setScene(scene);
 		stage.show();

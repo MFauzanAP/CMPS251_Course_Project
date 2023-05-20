@@ -75,7 +75,7 @@
                         </ScrollPane>
                         <ButtonBar layoutY="335.0" prefHeight="40.0" prefWidth="570.0">
                            <buttons>
-                              <Button fx:id="printSlotsButton" mnemonicParsing="false" onAction="#handlePrintData" text="Print Data" />
+                              <Button fx:id="printSlotsButton" mnemonicParsing="false" onAction="#handlePrintData" text="Generate Report" />
                               <Button fx:id="addSlotButton" mnemonicParsing="false" onAction="#handleAddData" text="Add Slot" />
                            </buttons>
                            <padding>
@@ -117,7 +117,7 @@
                         </ScrollPane>
                         <ButtonBar layoutY="335.0" prefHeight="40.0" prefWidth="570.0">
                           <buttons>
-                              <Button fx:id="printServicesButton" mnemonicParsing="false" onAction="#handlePrintData" text="Print Data" />
+                              <Button fx:id="printServicesButton" mnemonicParsing="false" onAction="#handlePrintData" text="Generate Report" />
                             <Button fx:id="addServiceButton" mnemonicParsing="false" onAction="#handleAddData" text="Add Service" />
                           </buttons>
                            <padding>
@@ -156,7 +156,7 @@
                         </ScrollPane>
                         <ButtonBar layoutY="335.0" prefHeight="40.0" prefWidth="570.0">
                            <buttons>
-                              <Button fx:id="printPatientsButton" mnemonicParsing="false" onAction="#handlePrintData" text="Print Data" />
+                              <Button fx:id="printPatientsButton" mnemonicParsing="false" onAction="#handlePrintData" text="Generate Report" />
                               <Button fx:id="addPatientButton" mnemonicParsing="false" onAction="#handleAddData" text="Add Patient" />
                            </buttons>
                            <padding>
