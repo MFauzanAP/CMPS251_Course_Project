@@ -75,6 +75,7 @@
                         </ScrollPane>
                         <ButtonBar layoutY="335.0" prefHeight="40.0" prefWidth="570.0">
                            <buttons>
+                              <Button mnemonicParsing="false" text="Print Data" />
                               <Button mnemonicParsing="false" text="Add Slot" />
                            </buttons>
                            <padding>
@@ -116,6 +117,7 @@
                         </ScrollPane>
                         <ButtonBar layoutY="335.0" prefHeight="40.0" prefWidth="570.0">
                           <buttons>
+                              <Button mnemonicParsing="false" text="Print Data" />
                             <Button mnemonicParsing="false" text="Add Service" />
                           </buttons>
                            <padding>
@@ -141,8 +143,8 @@
                            <content>
                               <TableView fx:id="tablePatients" fixedCellSize="24.0" prefHeight="290.0" prefWidth="538.0">
                                  <columns>
-                                    <TableColumn fx:id="colPatientsId" editable="false" prefWidth="173.599977850914" resizable="false" text="ID" />
-                                    <TableColumn fx:id="colPatientsName" editable="false" prefWidth="203.2000274658203" resizable="false" text="Full Name" />
+                                    <TableColumn fx:id="colPatientsId" editable="false" prefWidth="127.1999534368515" resizable="false" style="-fx-alignment: CENTER;" text="ID" />
+                                    <TableColumn fx:id="colPatientsName" editable="false" prefWidth="250.40003967285156" resizable="false" text="Full Name" />
                                     <TableColumn fx:id="colPatientsSlots" editable="false" prefWidth="104.0" resizable="false" sortable="false" style="-fx-alignment: CENTER;" />
                                     <TableColumn fx:id="colPatientsEdit" editable="false" prefWidth="72.80000610351567" resizable="false" sortable="false" style="-fx-alignment: CENTER;" />
                                  </columns>
@@ -154,6 +156,7 @@
                         </ScrollPane>
                         <ButtonBar layoutY="335.0" prefHeight="40.0" prefWidth="570.0">
                            <buttons>
+                              <Button mnemonicParsing="false" text="Print Data" />
                               <Button mnemonicParsing="false" text="Add Patient" />
                            </buttons>
                            <padding>

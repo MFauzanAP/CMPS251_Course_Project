@@ -21,7 +21,7 @@ import cmps251.utils.TimeUtils;
  * <p> <i>Created on 18/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.16
+ * @version		1.17
  * @since		1.12
  */
 public final class SlotRepository {
@@ -617,12 +617,13 @@ public final class SlotRepository {
 	 */
 	public static void bookSlot(Slot slot, String patient) {
 
-		//	TODO Validate slot booking
-
 		//	Deconstruct slot properties
 		LocalDate date = slot.getDate();
 		LocalTime time = slot.getTime();
 		String service = slot.getAllocatedService().getId();
+
+		//	Validate this booking
+		if (Slot.isValidBooking(slot, patient, true) != "") return;
 
 		//	Create a new slot with the given data
 		Patient allocatedPatient = PatientRepository.getPatientById(patient);
@@ -678,7 +679,6 @@ public final class SlotRepository {
 		bookSlot(LocalDateTime.of(date, time), service.getId(), patient.getId());
 	}
 	
-
 //endregion
 
 

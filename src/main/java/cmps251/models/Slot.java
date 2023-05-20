@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import cmps251.exceptions.IllegalSlotDateException;
 import cmps251.exceptions.IllegalSlotTimeException;
+import cmps251.repos.ServiceRepository;
+import cmps251.repos.SlotRepository;
 import cmps251.utils.TimeUtils;
 
 
@@ -20,7 +22,7 @@ import cmps251.utils.TimeUtils;
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.16
+ * @version		1.17
  * @since		1.0
  */
 public class Slot extends Identifiable {
@@ -426,25 +428,95 @@ public class Slot extends Identifiable {
 		return "";
 
 	}
-
-	/** 
-	 * Checks if the given date time combination is valid
-	 * 
-	 * @param time							- the time to check the validity of
-	 * @param date							- the date to check the validity of
-	 * @param throwError					- should we throw an error here?
-	 * 
-	 * @return String						- the error message
-	 * 
-	 * @throws IllegalSlotDateException		if given date at the current slot time is in the past
-	 * @throws IllegalSlotTimeException		if given time starts before 7:00AM or after 8:30PM
-	 * @throws IllegalSlotTimeException		if given time is not within 30 minute time intervals
-	 * @throws IllegalSlotTimeException		if given time at the current slot date is in the past
-	 */
 	public static String isValidDateTime(LocalTime time, LocalDate date, boolean throwError) {
 		return isValidDateTime(date, time, throwError);
 	}
 
+	/** 
+	 * Checks if the given booking is valid
+	 * 
+	 * @param slot							- the slot to check the booking validity for
+	 * @param patient						- the patient who will book the slot
+	 * @param throwError					- should we throw an error here?
+	 * 
+	 * @return String						- the error message
+	 * 
+	 * @throws IllegalArgumentException		if the given slot is already booked
+	 * @throws IllegalArgumentException		if the given patient already has a booking at this date and time for another service
+	 * @throws IllegalArgumentException		if the given slot's service has reached the maximum number of bookings for the day
+	 */
+	public static String isValidBooking(Slot slot, String patient, boolean throwError) {
+
+		//	Deconstruct slot properties
+		LocalDate date = slot.getDate();
+		LocalTime time = slot.getTime();
+		String service = slot.getAllocatedService().getId();
+
+		//	If the given slot is already booked
+		if (SlotRepository.getSlotByDateTimeService(date, time, service) != null) {
+			String errorMessage = "This slot is unavailable!";
+			if (throwError) throw new IllegalSlotDateException(errorMessage);
+			return errorMessage;
+		}
+
+		//	If the given patient already has a booking at this date and time for another service
+		if (SlotRepository.getSlotByDateTimePatient(date, time, patient) != null) {
+			String errorMessage = "You cannot book 2 slots at the same date and time!";
+			if (throwError) throw new IllegalSlotDateException(errorMessage);
+			return errorMessage;
+		}
+
+		//	If the given slot's service has reached the maximum number of bookings for the day
+		if (SlotRepository.getSlotsByDateService(date, service).size() >= slot.getAllocatedService().getMaxSlots()) {
+			String errorMessage = "This slot has reached the maximum number of bookings for the day!";
+			if (throwError) throw new IllegalSlotDateException(errorMessage);
+			return errorMessage;
+		}
+
+		//	Else return nothing since the given booking is valid
+		return "";
+
+	}
+	public static String isValidBooking(Slot slot, Patient patient, boolean throwError) {
+		return isValidBooking(slot, patient.getId(), throwError);
+	}
+	public static String isValidBooking(LocalDateTime datetime, String service, String patient, boolean throwError) {
+		return isValidBooking(new Slot(datetime, ServiceRepository.getServiceById(service)), patient, throwError);
+	}
+	public static String isValidBooking(LocalDateTime datetime, Service service, String patient, boolean throwError) {
+		return isValidBooking(datetime, service.getId(), patient, throwError);
+	}
+	public static String isValidBooking(LocalDateTime datetime, String service, Patient patient, boolean throwError) {
+		return isValidBooking(datetime, service, patient.getId(), throwError);
+	}
+	public static String isValidBooking(LocalDateTime datetime, Service service, Patient patient, boolean throwError) {
+		return isValidBooking(datetime, service.getId(), patient.getId(), throwError);
+	}
+	public static String isValidBooking(LocalDate date, LocalTime time, String service, String patient, boolean throwError) {
+		return isValidBooking(LocalDateTime.of(date, time), service, patient, throwError);
+	}
+	public static String isValidBooking(LocalDate date, LocalTime time, Service service, String patient, boolean throwError) {
+		return isValidBooking(LocalDateTime.of(date, time), service.getId(), patient, throwError);
+	}
+	public static String isValidBooking(LocalDate date, LocalTime time, String service, Patient patient, boolean throwError) {
+		return isValidBooking(LocalDateTime.of(date, time), service, patient.getId(), throwError);
+	}
+	public static String isValidBooking(LocalDate date, LocalTime time, Service service, Patient patient, boolean throwError) {
+		return isValidBooking(LocalDateTime.of(date, time), service.getId(), patient.getId(), throwError);
+	}
+	public static String isValidBooking(LocalTime time, LocalDate date, String service, String patient, boolean throwError) {
+		return isValidBooking(LocalDateTime.of(date, time), service, patient, throwError);
+	}
+	public static String isValidBooking(LocalTime time, LocalDate date, Service service, String patient, boolean throwError) {
+		return isValidBooking(LocalDateTime.of(date, time), service.getId(), patient, throwError);
+	}
+	public static String isValidBooking(LocalTime time, LocalDate date, String service, Patient patient, boolean throwError) {
+		return isValidBooking(LocalDateTime.of(date, time), service, patient.getId(), throwError);
+	}
+	public static String isValidBooking(LocalTime time, LocalDate date, Service service, Patient patient, boolean throwError) {
+		return isValidBooking(LocalDateTime.of(date, time), service.getId(), patient.getId(), throwError);
+	}
+	
 	/** 
 	 * Generates an ID for this slot
 	 * 
