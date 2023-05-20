@@ -2,7 +2,6 @@ package cmps251.models;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Random;
 
 /**
  * This is an abstract class used by classes which implement the {@code ID} property
@@ -16,7 +15,7 @@ import java.util.Random;
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.13
+ * @version		1.16
  * @since		1.0
  */
 public abstract class Identifiable implements Serializable {
@@ -75,7 +74,7 @@ public abstract class Identifiable implements Serializable {
 	}
 
 	/** 
-	 * Generates an ID for this service
+	 * Generates an ID for this object
 	 * 
 	 * <p> This is calculated by doing the following:
 	 * <ol>
@@ -88,7 +87,7 @@ public abstract class Identifiable implements Serializable {
 	 * <p> <b>NOTE</b>: this method should only be called from within the constructor.
 	 * Usage outside may break certain features!
 	 */	
-	protected void generateId() {
+	protected String generateId() {
 
 		//	Get the class name
 		String className = this.getClass().getSimpleName();
@@ -102,15 +101,11 @@ public abstract class Identifiable implements Serializable {
 		int minute = currentDateTime.getMinute();
 		int second = currentDateTime.getSecond();
 
-		//	Generate a random 4 digit number
-		Random rand = new Random();
-		int randInt = rand.nextInt(9999);
-
 		//	Concatenate the datetime and random number together
-		String idConcat = String.format("%s%04d%02d%02d%02d%02d%02d%04d", className, year, month, day, hour, minute, second, randInt);
+		String idConcat = String.format("%s%04d%02d%02d%02d%02d%02d", className, year, month, day, hour, minute, second);
 
-		//	Set the new ID
-		this.setId(idConcat);
+		//	Return the new ID
+		return idConcat;
 
 	}
 

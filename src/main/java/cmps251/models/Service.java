@@ -14,7 +14,7 @@ import cmps251.exceptions.IllegalServicePriceException;
  * <p> <i>Created on 16/05/2023 by Grafael Karilwurara</i>
  * 
  * @author		Grafael Karilwurara
- * @version		1.13
+ * @version		1.16
  * @since		1.5
  */
 public class Service extends Identifiable implements Comparable<Service> {
@@ -36,17 +36,6 @@ public class Service extends Identifiable implements Comparable<Service> {
 //region
 
 	/**
-	 * This is the default constructor for the {@code Service} class which randomly generates the ID.
-	 * This constructor is not meant to be used outside of the class itself 
-	 */
-	private Service() {
-
-		//	Generate a random id for this slot
-		this.generateId();
-
-	}
-
-	/**
 	 * This constructor takes in a title, maximum number of slots, and a price per slot.
 	 * This is meant to be the default constructor to be used
 	 *
@@ -60,12 +49,13 @@ public class Service extends Identifiable implements Comparable<Service> {
 	 */
 	public Service(String title, int maxSlots, double pricePerSlot) {
 
-		//	Generate ID
-		this();
-
+		//	Set properties
 		this.setTitle(title);
 		this.setMaxSlots(maxSlots);
 		this.setPricePerSlot(pricePerSlot);
+
+		//	Generate a random id for this slot
+		this.setId(generateId());
 
 	}
 
@@ -214,6 +204,33 @@ public class Service extends Identifiable implements Comparable<Service> {
 
 	}
  
+	/** 
+	 * Generates an ID for this service
+	 * 
+	 * <p> This is calculated by doing the following:
+	 * <ol>
+	 * 		<li> Get the initial ID from {@code Identifiable}
+	 * 		<li> Add title, max slots, and price per slot to this service ID
+	 * </ol>
+	 */	
+	protected String generateId() {
+
+		//	Get the super class id
+		String idConcat = super.generateId();
+
+		//	Fetch this object's properties and convert them into strings
+		String title = this.getTitle();
+		String maxSlots = String.valueOf(this.getMaxSlots());
+		String pricePerSlot = String.valueOf(this.getPricePerSlot());
+
+		//	Concatenate the properties together
+		idConcat += String.format("T%sMS%sPPS%s", title, maxSlots, pricePerSlot);
+
+		//	Return the new ID
+		return idConcat;
+
+	}
+
 	/** 
 	 * Returns this object as a string representation
 	 * 

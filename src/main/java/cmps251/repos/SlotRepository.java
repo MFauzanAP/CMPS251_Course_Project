@@ -21,7 +21,7 @@ import cmps251.utils.TimeUtils;
  * <p> <i>Created on 18/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.14
+ * @version		1.16
  * @since		1.12
  */
 public final class SlotRepository {
@@ -535,9 +535,6 @@ public final class SlotRepository {
 					//	If there is no slot at this time then add it as a free slot
 					if (!allSlots.containsKey(time)) outputList.add(new Slot(date, time, service));
 
-					//	But if there is a slot, check if it is free
-					else if (!allSlots.get(time).isBooked()) outputList.add(new Slot(date, time, service));
-
 				}
 				catch (IllegalSlotTimeException e) {
 
@@ -583,9 +580,6 @@ public final class SlotRepository {
 				//	If there is no slot at this time then add it as a free slot
 				if (!allSlots.containsKey(time)) outputList.add(new Slot(date, time, ServiceRepository.getServiceById(service)));
 
-				//	But if there is a slot, check if it is free
-				else if (!allSlots.get(time).isBooked()) outputList.add(new Slot(date, time, ServiceRepository.getServiceById(service)));
-
 			}
 			catch (IllegalSlotTimeException e) {
 
@@ -623,7 +617,7 @@ public final class SlotRepository {
 	 */
 	public static void bookSlot(Slot slot, String patient) {
 
-		//	Validate slot booking
+		//	TODO Validate slot booking
 
 		//	Deconstruct slot properties
 		LocalDate date = slot.getDate();

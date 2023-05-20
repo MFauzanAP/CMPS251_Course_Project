@@ -31,10 +31,26 @@ import javafx.util.Callback;
  * <p> <i>Created on 19/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.15
+ * @version		1.16
  * @since		1.14
  */
 public class MainController {
+
+
+
+/* --------------------------- Constant Attributes -------------------------- */
+//region
+
+	ObservableList<Slot> slots = FXCollections.observableArrayList(SlotRepository.getSlotsAsList());
+	ObservableList<Service> services = FXCollections.observableArrayList(ServiceRepository.getServicesAsList());
+	ObservableList<Patient> patients = FXCollections.observableArrayList(PatientRepository.getPatientsAsList());
+
+//endregion
+
+
+
+/* -------------------------- Component Attributes -------------------------- */
+//region
 
 	@FXML
     private TabPane tabContainer;
@@ -98,9 +114,36 @@ public class MainController {
 
     @FXML
     private TableColumn<Patient, Button> colPatientsEdit;
+
+//endregion
+
+
 	
+/* ---------------------------- Initialize Method --------------------------- */
+//region
+
+	/**
+	 * This function is called when the scene is first loaded.
+     * Here we should assert for component injection, proper factories, and any other necessary procedures
+	 */
 	@FXML
 	public void initialize() {
+		assertComponents();
+		setFactories();
+		setObservables();
+	}
+
+//endregion
+
+
+
+/* ----------------------------- Utility Methods ---------------------------- */
+//region
+
+	/**
+	 * Makes sure all components are initialized properly and with the correct names
+	 */
+	public void assertComponents() {
 		assert tabContainer != null : "fx:id=\"tabContainer\" was not injected: check your FXML file 'main.fxml'.";
         assert tabSlots != null : "fx:id=\"tabSlots\" was not injected: check your FXML file 'main.fxml'.";
         assert tableSlots != null : "fx:id=\"tableSlots\" was not injected: check your FXML file 'main.fxml'.";
@@ -122,7 +165,14 @@ public class MainController {
         assert colPatientsName != null : "fx:id=\"colPatientsName\" was not injected: check your FXML file 'main.fxml'.";
         assert colPatientsSlots != null : "fx:id=\"colPatientsSlots\" was not injected: check your FXML file 'main.fxml'.";
         assert colPatientsEdit != null : "fx:id=\"colPatientsEdit\" was not injected: check your FXML file 'main.fxml'.";
+	}
 
+	/**
+	 * Here is where factories should be set up
+	 */
+	public void setFactories() {
+
+		//	Set slot table factories
 		colSlotsDate.setCellValueFactory(new PropertyValueFactory<>("date"));
 		colSlotsTime.setCellValueFactory(new PropertyValueFactory<>("time"));
 		colSlotsService.setCellValueFactory(new Callback<CellDataFeatures<Slot, String>, ObservableValue<String>>() {
@@ -137,32 +187,44 @@ public class MainController {
 		});
 		colSlotsEdit.setCellFactory((TableCellButton.createCellButton("Edit", null)));
 
+		//	Set service table factories
 		colServicesTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
 		colServicesPricePerSlot.setCellValueFactory(new PropertyValueFactory<>("pricePerSlot"));
 		colServicesMaxSlots.setCellValueFactory(new PropertyValueFactory<>("maxSlots"));
 		colServicesSlots.setCellFactory((TableCellButton.createCellButton("View Slots", null)));
 		colServicesEdit.setCellFactory((TableCellButton.createCellButton("Edit", null)));
 
+		//	Set patient table factories
 		colPatientsId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colPatientsName.setCellValueFactory(new PropertyValueFactory<>("name"));
 		colPatientsSlots.setCellFactory((TableCellButton.createCellButton("View Slots", null)));
 		colPatientsEdit.setCellFactory((TableCellButton.createCellButton("Edit", null)));
+
 	}
+
+	/**
+	 * Assigns variables to observables in the scene
+	 */
+	public void setObservables() {
+		tableSlots.setItems(slots);
+		tableServices.setItems(services);
+		tablePatients.setItems(patients);
+	}
+
+//endregion
+
+
+
+/* ----------------------------- Handler Methods ---------------------------- */
+//region
 
 	@FXML
     void handleTabChange(Event event) {
-		if (event.getTarget().equals(tabSlots)) {
-			ObservableList<Slot> slots = FXCollections.observableArrayList(SlotRepository.getSlotsAsList());
-			tableSlots.setItems(slots);
-		}
-		if (event.getTarget().equals(tabServices)) {
-			ObservableList<Service> services = FXCollections.observableArrayList(ServiceRepository.getServicesAsList());
-			tableServices.setItems(services);
-		}
-		if (event.getTarget().equals(tabPatients)) {
-			ObservableList<Patient> patients = FXCollections.observableArrayList(PatientRepository.getPatientsAsList());
-			tablePatients.setItems(patients);
-		}
+		if (event.getTarget().equals(tabSlots)) this.slots.setAll(SlotRepository.getSlotsAsList());
+		if (event.getTarget().equals(tabServices)) this.services.setAll(ServiceRepository.getServicesAsList());
+		if (event.getTarget().equals(tabPatients)) this.patients.setAll(PatientRepository.getPatientsAsList());
     }
+
+//endregion
 	
 }

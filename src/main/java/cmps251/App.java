@@ -26,7 +26,7 @@ import cmps251.repos.SlotRepository;
  * <p> <i>Created on 19/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.15
+ * @version		1.16
  * @since		1.14
  */
 public class App extends Application {
@@ -56,7 +56,7 @@ public class App extends Application {
         ServiceRepository.addService(new Service("Specialized", 10, 150));
         ServiceRepository.addService(new Service("Operation", 5, 1000));
 
-        ArrayList<Slot> availableSlots = SlotRepository.getAvailableSlotsByDateService(LocalDate.now(), ServiceRepository.getServicesByTitle("Operation").get(0).getId());
+        ArrayList<Slot> availableSlots = SlotRepository.getAvailableSlotsByDateService(LocalDate.now(), ServiceRepository.getServicesByTitle("Operation").get(0));
         SlotRepository.bookSlot(availableSlots.get(0), patient);
         SlotRepository.bookSlot(availableSlots.get(1), patient);
         SlotRepository.bookSlot(availableSlots.get(3), patient);

@@ -20,7 +20,7 @@ import cmps251.utils.TimeUtils;
  * <p> <i>Created on 14/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.14
+ * @version		1.16
  * @since		1.0
  */
 public class Slot extends Identifiable {
@@ -56,17 +56,6 @@ public class Slot extends Identifiable {
 //region
 
 	/**
-	 * This is the default constructor for the {@code Slot} class which randomly generates the ID.
-	 * This constructor is not meant to be used outside of the class itself 
-	 */
-	private Slot() {
-
-		//	Generate a random id for this slot
-		this.generateId();
-
-	}	
-
-	/**
 	 * This constructor takes in a starting date and time for a slot.
 	 * It is meant to be used to create empty slots
 	 * 
@@ -74,12 +63,12 @@ public class Slot extends Identifiable {
 	 */
 	public Slot(LocalDateTime datetime) {
 
-		//	Call parent constructor to generate ID
-		this();
-
 		//	Set object attributes
 		this.setDate(datetime.toLocalDate());
 		this.setTime(datetime.toLocalTime());
+
+		//	Generate a random id for this slot
+		this.setId(generateId());
 
 	}
 	public Slot(LocalDate date, LocalTime time) {
@@ -113,6 +102,9 @@ public class Slot extends Identifiable {
 
 		//	Set the slot's service
 		this.setAllocatedService(allocatedService);
+
+		//	Generate a random id for this slot
+		this.setId(generateId());
 
 	}
 	public Slot(LocalDate date, LocalTime time, Service allocatedService) {
@@ -149,6 +141,9 @@ public class Slot extends Identifiable {
 		this.setBooked(true);
 		this.setAllocatedService(allocatedService);
 		this.setAllocatedPatient(allocatedPatient);
+
+		//	Generate a random id for this slot
+		this.setId(generateId());
 
 	}
 	public Slot(LocalDate date, LocalTime time, Service allocatedService, Patient allocatedPatient) {
@@ -448,6 +443,34 @@ public class Slot extends Identifiable {
 	 */
 	public static String isValidDateTime(LocalTime time, LocalDate date, boolean throwError) {
 		return isValidDateTime(date, time, throwError);
+	}
+
+	/** 
+	 * Generates an ID for this slot
+	 * 
+	 * <p> This is calculated by doing the following:
+	 * <ol>
+	 * 		<li> Get the initial ID from {@code Identifiable}
+	 * 		<li> Add date, time, service ID, and patient ID to the slot ID
+	 * </ol>
+	 */	
+	protected String generateId() {
+
+		//	Get the super class id
+		String idConcat = super.generateId();
+
+		//	Fetch this object's properties and convert them into strings
+		String date = this.getDate().toString();
+		String time = this.getTime().toString();
+		String service = this.getAllocatedService() != null ? this.getAllocatedService().getId() : "None";
+		String patient = this.getAllocatedPatient() != null ? this.getAllocatedPatient().getId() : "None";
+
+		//	Concatenate the properties together
+		idConcat += String.format("D%sT%sS%sP%s", date, time, service, patient);
+
+		//	Return the new ID
+		return idConcat;
+
 	}
 
 	/** 
