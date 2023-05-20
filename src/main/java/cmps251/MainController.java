@@ -37,7 +37,7 @@ import javafx.util.Callback;
  * <p> <i>Created on 19/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.17
+ * @version		1.20
  * @since		1.14
  */
 public class MainController {
@@ -373,8 +373,8 @@ public class MainController {
 
 		if (event.getTarget().equals(tabSlots)) {
 			this.slots.setAll(SlotRepository.getSlotsAsList());
-			this.serviceTitles.setAll(getServiceTitles(getSlotServices(this.slots)));
-			this.patientNames.setAll(getPatientNames(getSlotPatients(this.slots)));
+			this.serviceTitles.setAll(getServiceTitles(ServiceRepository.getServicesAsList()));
+			this.patientNames.setAll(getPatientNames(PatientRepository.getPatientsAsList()));
 		}
 		if (event.getTarget().equals(tabServices)) {
 			this.services.setAll(ServiceRepository.getServicesAsList());
@@ -431,10 +431,12 @@ public class MainController {
 	@FXML
     private void handleAddData(Event event) {
 		try {
-			App.newWindow("add_slot", 450, 291);
+			if (event.getTarget().equals(addSlotButton)) App.newWindow("add_slot", 450, 291);
+			if (event.getTarget().equals(addServiceButton)) App.newWindow("add_service", 321.6, 248);
 		}
 		catch (IOException e) {
-			System.err.println("Unable to find add_slot.fxml!");
+			System.err.println("Unable to find the following file!");
+			System.err.println(e.getMessage());
 		}
     }
 

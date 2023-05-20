@@ -23,6 +23,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
 /**
@@ -31,7 +32,7 @@ import javafx.stage.Stage;
  * <p> <i>Created on 20/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.19
+ * @version		1.20
  * @since		1.19
  */
 public class AddSlotController {
@@ -231,7 +232,7 @@ public class AddSlotController {
 		}
 		catch (Exception e) {
 			Alert alert = new Alert(AlertType.ERROR, e.getMessage(), ButtonType.OK);
-			alert.setWidth(400);
+			alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 			alert.show();
 		}
     }

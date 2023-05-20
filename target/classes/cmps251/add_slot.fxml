@@ -39,13 +39,13 @@
                     </rowConstraints>
                      <children>
                         <Label text="Date" />
-                        <DatePicker fx:id="slotDate" onAction="#handleDataChange" prefWidth="160.0" GridPane.columnIndex="1" />
+                        <DatePicker fx:id="slotDate" onAction="#handleDataChange" prefWidth="160.0" promptText="Enter slot date..." GridPane.columnIndex="1" />
                         <Label text="Time" GridPane.rowIndex="1" />
-                        <ComboBox fx:id="slotTime" editable="true" prefWidth="160.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <ComboBox fx:id="slotTime" editable="true" prefWidth="160.0" promptText="Enter slot date..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label text="Service" GridPane.rowIndex="2" />
-                        <ComboBox fx:id="slotService" editable="true" onAction="#handleDataChange" prefWidth="160.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <ComboBox fx:id="slotService" editable="true" onAction="#handleDataChange" prefWidth="160.0" promptText="Enter slot service..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <Label text="Patient" GridPane.rowIndex="3" />
-                        <ComboBox fx:id="slotPatient" editable="true" prefWidth="160.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <ComboBox fx:id="slotPatient" editable="true" prefWidth="160.0" promptText="Enter slot patient..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
                      </children>
                   </GridPane>
                   <ButtonBar>

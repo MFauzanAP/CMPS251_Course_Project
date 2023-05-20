@@ -26,7 +26,7 @@ import cmps251.repos.SlotRepository;
  * <p> <i>Created on 19/05/2023 by Muhammad Putra</i>
  * 
  * @author		Muhammad Putra
- * @version		1.18
+ * @version		1.20
  * @since		1.14
  */
 public class App extends Application {
@@ -121,7 +121,7 @@ public class App extends Application {
 	 * 
 	 * @throws IOException      if the file could not be found
 	 */
-	static void newWindow(String fxml, int width, int height) throws IOException {
+	static void newWindow(String fxml, double width, double height) throws IOException {
 		Stage stage = new Stage();
 		stage.setScene(new Scene(loadFXML(fxml), width, height));
 		stage.show();

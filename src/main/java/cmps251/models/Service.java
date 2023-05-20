@@ -14,7 +14,7 @@ import cmps251.exceptions.IllegalServicePriceException;
  * <p> <i>Created on 16/05/2023 by Grafael Karilwurara</i>
  * 
  * @author		Grafael Karilwurara
- * @version		1.16
+ * @version		1.20
  * @since		1.5
  */
 public class Service extends Identifiable implements Comparable<Service> {
@@ -170,7 +170,7 @@ public class Service extends Identifiable implements Comparable<Service> {
 
 		//	If the given value exceeds the hospital's maximum number of slots per day
 		if (maxSlots > Slot.MAX_SLOTS_PER_DAY) {
-			String errorMessage = "Maximum number of slots cannot be above the hospital's limit!";
+			String errorMessage = "Maximum number of slots cannot be above the hospital's limit (28)!";
 			if (throwError) throw new IllegalServiceMaxSlotsException(errorMessage);
 			return errorMessage;
 		}
